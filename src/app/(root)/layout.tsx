@@ -177,7 +177,7 @@ const PageLayout = ({ children }: { children: React.ReactNode }) => {
 
             {/* language selector & user profile */}
             <div className="flex items-center gap-3">
-              <LanguageFilter />
+              <LanguageFilter variant="header" />
 
               <button
                 type="button"

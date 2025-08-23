@@ -22,11 +22,13 @@ const language = [
   },
 ];
 
-const LanguageFilter = () => {
+const LanguageFilter = ({ variant }: { variant: "settings" | "header" }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   type LanguageType = (typeof language)[number];
   const [selectedLanguage, setSelectedLanguage] = useState<LanguageType>(language[0]);
+
+  const headerVariant = variant === "header";
 
   const handleLanguageClick = (selected: LanguageType) => {
     setSelectedLanguage(selected);
@@ -54,16 +56,32 @@ const LanguageFilter = () => {
     <div className="relative" ref={dropdownRef}>
       <div className="flex items-center">
         <button
-          className="flex w-20 items-center justify-between gap-2 rounded-[8px] border border-transparent px-[16px] py-[7px] text-sm whitespace-nowrap outline-0 placeholder:text-lighter hover:bg-darker focus:border-neutral"
+          className={cn(
+            "flex items-center justify-between gap-2 rounded-[8px] border px-[16px] py-[7px] text-sm whitespace-nowrap outline-0 placeholder:text-lighter hover:bg-darker focus:border-neutral",
+            headerVariant ? "w-20 border-transparent" : "w-32 border-dark"
+          )}
           onClick={() => setIsOpen(!isOpen)}
         >
-          <Globe className="h-4 w-4" /> {selectedLanguage.shortLabel}
+          {headerVariant ? (
+            <>
+              <Globe className="h-4 w-4" /> {selectedLanguage.shortLabel}
+            </>
+          ) : (
+            <>
+              {selectedLanguage.label} ({selectedLanguage.shortLabel})
+            </>
+          )}
         </button>
       </div>
 
       {/* dropdown */}
       {isOpen && (
-        <div className="absolute top-[110%] right-0 z-10 w-[180px] rounded-[8px] bg-darker p-2 text-light">
+        <div
+          className={cn(
+            "absolute z-10 w-[180px] rounded-[8px] bg-darker p-2 text-light",
+            headerVariant ? "top-[110%] right-0" : "bottom-[110%] left-0"
+          )}
+        >
           <div className="flex flex-col justify-start gap-2 text-left">
             {language.map((language) => (
               <button
