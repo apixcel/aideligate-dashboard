@@ -1,10 +1,14 @@
+"use client";
+import { useAuth } from "@/hooks/useAuth";
 import { CalendarDays, ChevronRight, PhoneCall, Star } from "lucide-react";
 import Link from "next/link";
-
 const HomeStatisticsCards = () => {
+  const { user, isLoading } = useAuth();
+
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {/* card 1 */}
+      {user?.email}
       <div className="flex flex-col gap-6 rounded-xl border border-darker bg-darkest p-6 transition-all duration-300 hover:border-dark hover:shadow-md">
         <div className="flex items-center justify-between">
           <h5 className="text-sm font-medium text-lightest xl:text-base">Calls Today</h5>

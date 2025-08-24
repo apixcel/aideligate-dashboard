@@ -19,14 +19,19 @@ const loginAs = [
   },
 ];
 
-const LoginAsFilter = () => {
+type LoginAsType = (typeof loginAs)[number];
+interface IProps {
+  onChange: (role: LoginAsType) => void;
+}
+
+const LoginAsFilter: React.FC<IProps> = ({ onChange }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  type LoginAsType = (typeof loginAs)[number];
   const [selectedLoginAs, setSelectedLoginAs] = useState<LoginAsType>(loginAs[0]);
 
   const handleLoginAsClick = (selected: LoginAsType) => {
     setSelectedLoginAs(selected);
+    onChange(selected);
     setIsOpen(false);
   };
 

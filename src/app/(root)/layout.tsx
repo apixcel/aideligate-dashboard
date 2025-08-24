@@ -1,14 +1,15 @@
 "use client";
 
-import Link from "next/link";
+import { signOutAction } from "@/actions/auth.action";
+import { LanguageFilter } from "@/components";
 import { sidebarLinks } from "@/constants";
-import { AlignJustify, ChevronLeft, Wifi } from "lucide-react";
-import { useState } from "react";
 import { cn } from "@/utils";
-import { usePathname } from "next/navigation";
+import { AlignJustify, ChevronLeft, Wifi } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
-import { LanguageFilter } from "@/components";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 const SIDEBAR_OPEN = 256; // 16rem
 const SIDEBAR_CLOSED = 64; // 4rem
@@ -179,6 +180,15 @@ const PageLayout = ({ children }: { children: React.ReactNode }) => {
             <div className="flex items-center gap-3">
               <LanguageFilter variant="header" />
 
+              <button
+                type="button"
+                onClick={async () => await signOutAction()}
+                className="hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 focus-visible:ring-ring/50 relative flex h-8 items-center justify-center overflow-hidden rounded-full px-0 py-0 transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50"
+              >
+                <span className="bg-muted flex h-full w-full items-center justify-center rounded-full text-sm font-medium">
+                  Logout
+                </span>
+              </button>
               <button
                 type="button"
                 className="hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 focus-visible:ring-ring/50 relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-full px-0 py-0 transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50"
