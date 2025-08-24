@@ -2,7 +2,9 @@
 
 import { signOutAction } from "@/actions/auth.action";
 import { LanguageFilter } from "@/components";
+import Loader from "@/components/shared/Loader";
 import { sidebarLinks } from "@/constants";
+import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/utils";
 import { AlignJustify, ChevronLeft, Wifi } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
@@ -18,6 +20,8 @@ const PageLayout = ({ children }: { children: React.ReactNode }) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const pathname = usePathname();
 
+  const { isLoading } = useAuth();
+
   const parentVariants = {
     open: {
       transition: { staggerChildren: 0.05, delayChildren: 0.01 },
@@ -31,6 +35,8 @@ const PageLayout = ({ children }: { children: React.ReactNode }) => {
     open: { opacity: 1, x: 0 },
     closed: { opacity: 0, x: -10 },
   } as const;
+
+  if (isLoading) return <Loader className="h-screen" />;
 
   return (
     <div className="min-h-screen">

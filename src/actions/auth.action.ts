@@ -1,6 +1,6 @@
 "use server";
 
-import { IUserSignUp } from "@/interface.ts/auth.interface";
+import { IUserSignUp } from "@/interface/auth.interface";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -104,6 +104,21 @@ export const verifyEmail = async (code: string) => {
   }
   return {
     data: data?.user,
+    error: null,
+    status: 200,
+  };
+};
+
+export const forgotPassword = async (email: string) => {
+  const supabase = await createClient();
+  const { error } = await supabase.auth.resetPasswordForEmail(email);
+  if (error) {
+    return {
+      error: error.message,
+      status: error.status,
+    };
+  }
+  return {
     error: null,
     status: 200,
   };

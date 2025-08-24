@@ -1,6 +1,5 @@
-import { HomeStatisticsCards, HomeFeedTabs, SectionTitle } from "@/components";
+import { HomeFeedTabs, HomeStatisticsCards, SectionTitle } from "@/components";
 import { Clock, Plus } from "lucide-react";
-
 const Home = () => {
   return (
     <>

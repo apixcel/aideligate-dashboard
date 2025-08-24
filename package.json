@@ -14,9 +14,11 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.7",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.56.0",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "formik": "^2.4.6",
     "lucide-react": "^0.540.0",
     "motion": "^12.23.12",

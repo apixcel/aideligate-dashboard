@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 const status = [
   {
     label: "All Status",
-    value: "all",
+    value: "",
   },
   {
     label: "Completed",
@@ -18,12 +18,15 @@ const status = [
     value: "missed",
   },
   {
-    label: "In Progress",
-    value: "in-progress",
+    label: "Voicemail",
+    value: "voicemail",
   },
 ];
 
-const StatusFilter = () => {
+interface IProps {
+  onChange?: (value: { value: string; label: string }) => void;
+}
+const StatusFilter: React.FC<IProps> = ({ onChange }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   type StatusType = (typeof status)[number];
@@ -31,6 +34,7 @@ const StatusFilter = () => {
 
   const handleStatusClick = (selected: StatusType) => {
     setSelectedStatus(selected);
+    onChange?.(selected);
     setIsOpen(false);
   };
 

@@ -6,10 +6,6 @@ import { useEffect, useRef, useState } from "react";
 
 const paginationPage = [
   {
-    label: "5",
-    value: 5,
-  },
-  {
     label: "10",
     value: 10,
   },
@@ -23,7 +19,11 @@ const paginationPage = [
   },
 ];
 
-const PaginationPageFilter = () => {
+interface IProps {
+  onChange?: (value: number) => void;
+}
+
+const PaginationPageFilter: React.FC<IProps> = ({ onChange }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   type PaginationPageType = (typeof paginationPage)[number];
@@ -34,6 +34,7 @@ const PaginationPageFilter = () => {
   const handlePaginationPageClick = (selected: PaginationPageType) => {
     setSelectedPaginationPage(selected);
     setIsOpen(false);
+    onChange?.(selected.value);
   };
 
   // outside click handler
@@ -71,6 +72,7 @@ const PaginationPageFilter = () => {
             {paginationPage.map((paginationPage) => (
               <button
                 key={paginationPage.value}
+                type="button"
                 className={cn(
                   "flex w-full items-center justify-between gap-1 rounded-[8px] px-3 py-1 text-left text-sm text-light hover:bg-dark",
                   selectedPaginationPage.value === paginationPage.value && "bg-dark"

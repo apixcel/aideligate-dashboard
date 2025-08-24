@@ -7,23 +7,19 @@ import { useEffect, useRef, useState } from "react";
 const sortBy = [
   {
     label: "Newest",
-    value: "newest",
+    value: "desc",
   },
   {
     label: "Oldest",
-    value: "oldest",
-  },
-  {
-    label: "Duration",
-    value: "duration",
-  },
-  {
-    label: "Staff",
-    value: "staff",
+    value: "asc",
   },
 ];
 
-const SortByFilter = () => {
+interface IProps {
+  onChange?: (value: { value: string; label: string }) => void;
+}
+
+const SortByFilter: React.FC<IProps> = ({ onChange }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   type SortByType = (typeof sortBy)[number];
@@ -31,6 +27,7 @@ const SortByFilter = () => {
 
   const handleSortByClick = (selected: SortByType) => {
     setSelectedSortBy(selected);
+    onChange?.(selected);
     setIsOpen(false);
   };
 

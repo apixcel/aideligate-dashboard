@@ -1,6 +1,19 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
 
+CREATE TABLE public.apppointments (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  patient_name character varying,
+  date_time timestamp with time zone,
+  service_type character varying,
+  notes character varying,
+  doctor_id uuid DEFAULT gen_random_uuid(),
+  client_id uuid NOT NULL,
+  CONSTRAINT apppointments_pkey PRIMARY KEY (id),
+  CONSTRAINT apppointments_doctor_id_fkey FOREIGN KEY (doctor_id) REFERENCES public.doctors(id),
+  CONSTRAINT apppointments_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.clients(id)
+);
 CREATE TABLE public.calls (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   client_id uuid NOT NULL,
@@ -25,4 +38,12 @@ CREATE TABLE public.clients (
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   CONSTRAINT clients_pkey PRIMARY KEY (id),
   CONSTRAINT clients_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
+);
+CREATE TABLE public.doctors (
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  full_name character varying,
+  client_id uuid DEFAULT gen_random_uuid(),
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  CONSTRAINT doctors_pkey PRIMARY KEY (id),
+  CONSTRAINT doctors_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.clients(id)
 );

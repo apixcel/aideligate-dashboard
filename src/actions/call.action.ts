@@ -1,18 +1,16 @@
 // app/actions/calls.ts
 "use server";
 
+import { ICall, TCallStatus } from "@/interface/call.interface";
 import { createClient } from "@/utils/supabase/server";
 
 export type GetClientCallsInput = {
-  /** If omitted, returns calls across all of the current user's clients */
-  clientId?: string;
-
   /** Pagination */
   page?: number; // default 1
   pageSize?: number; // default 20
 
   /** Filters */
-  status?: "completed" | "missed" | "voicemail";
+  status?: TCallStatus;
   from?: string | Date; // call_time >= from
   to?: string | Date; // call_time <= to
   search?: string; // matches caller_number or notes (ILIKE)
@@ -22,21 +20,12 @@ export type GetClientCallsInput = {
   sortDir?: "asc" | "desc";
 };
 
-type CallRow = {
-  id: string;
-  client_id: string;
-  caller_number: string;
-  call_time: string; // ISO
-  status: "completed" | "missed" | "voicemail";
-  notes: string | null;
-  clients?: { client_name: string } | null; // joined for convenience
-};
+
 
 export const getClientCallsAction = async (input: GetClientCallsInput = {}) => {
   const supabase = await createClient();
 
   const {
-    clientId,
     page = 1,
     pageSize = 20,
     status,
@@ -52,11 +41,10 @@ export const getClientCallsAction = async (input: GetClientCallsInput = {}) => {
 
   let query = supabase.from("calls").select(
     // join to get client_name (respects RLS on clients too)
-    "id, client_id, caller_number, call_time, status, notes, clients!inner(client_name)",
+    "id, client_id, caller_number, call_time, status, notes, clients!inner(client_name), created_at",
     { count: "exact" }
   );
 
-  if (clientId) query = query.eq("client_id", clientId);
   if (status) query = query.eq("status", status);
 
   if (from) query = query.gte("call_time", new Date(from).toISOString());
@@ -78,7 +66,9 @@ export const getClientCallsAction = async (input: GetClientCallsInput = {}) => {
   }
 
   return {
-    data: (data ?? []) as CallRow[],
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    data: (data ?? []) as ICall[],
     meta: {
       page,
       pageSize,
@@ -86,7 +76,6 @@ export const getClientCallsAction = async (input: GetClientCallsInput = {}) => {
       totalPages: Math.max(1, Math.ceil((count ?? 0) / pageSize)),
       sortBy,
       sortDir,
-      clientId: clientId ?? null,
       filters: {
         status: status ?? null,
         from: from ?? null,
