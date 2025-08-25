@@ -1,16 +1,28 @@
 "use server";
 
-import { IAppointment } from "@/interface/appointment.interface";
+import { IAppointment, TAppointmentStatus } from "@/interface/appointment.interface";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 
-export async function createAppointmentAction(payload: IAppointment) {
+export async function createAppointmentAction(
+  payload: Omit<IAppointment, "id" | "client_id"> & { revalidate?: string }
+) {
   const supabase = await createClient();
 
-  // basic validation
-  if (!payload.client_id) {
-    return { error: "client_id is required", status: 400 } as const;
+  const { data: auth, error: authError } = await supabase.auth.getUser();
+  if (authError) {
+    return { error: authError.message, status: 400 } as const;
   }
+
+  const client = await supabase.from("clients").select("*").eq("user_id", auth.user.id).single();
+  if (!client.data) {
+    return { error: "Client not found", status: 400 } as const;
+  }
+
+  if (client.error) {
+    return { error: client.error.message, status: 400 } as const;
+  }
+
   if (!payload.date_time) {
     return { error: "date_time is required", status: 400 } as const;
   }
@@ -26,13 +38,11 @@ export async function createAppointmentAction(payload: IAppointment) {
   const { data, error } = await supabase
     .from("apppointments") // <- your exact table name
     .insert({
-      client_id: payload.client_id,
-      patient_name: payload.patient_name ?? null,
+      client_id: client.data.id,
+      patient_name: payload.patient_name ?? "N/A",
       date_time: dt,
-      service_type: payload.service_type ?? null,
-      notes: payload.notes ?? null,
-      // IMPORTANT: your schema sets a DEFAULT gen_random_uuid() for doctor_id.
-      // Pass doctor_id explicitly, or make sure that default is removed.
+      service_type: payload.service_type ?? "N/A",
+      notes: payload.notes ?? "N/A",
       doctor_id: payload.doctor_id ?? null,
     })
     .select("*")
@@ -46,16 +56,17 @@ export async function createAppointmentAction(payload: IAppointment) {
   return { data, status: 200 } as const;
 }
 export type ListAppointmentsParams = {
-  client_id?: string; // filter by client
   doctor_id?: string; // optional filter
   from?: string | Date; // start datetime (inclusive)
   to?: string | Date; // end datetime (exclusive)
   page?: number; // default 1
   limit?: number; // default 20
   order?: "asc" | "desc"; // default "desc" (newest first)
+  search?: string;
+  status?: TAppointmentStatus;
 };
 
-export async function listAppointmentsAction(params: ListAppointmentsParams = {}) {
+export async function getAppointments(params: ListAppointmentsParams = {}) {
   const supabase = await createClient();
 
   const page = Math.max(1, params.page ?? 1);
@@ -65,21 +76,23 @@ export async function listAppointmentsAction(params: ListAppointmentsParams = {}
 
   let q = supabase
     .from("apppointments") // note: your table name has 3 p's
-    .select(
-      // select only what you need; "*" is fine to start
-      "id, created_at, patient_name, date_time, service_type, notes, doctor_id, client_id",
-      { count: "exact" }
-    )
+    .select("*, doctor:doctors(id, full_name)", { count: "exact" })
     .order("date_time", { ascending: (params.order ?? "desc") === "asc" })
     .range(fromIdx, toIdx);
 
-  if (params.client_id) q = q.eq("client_id", params.client_id);
   if (params.doctor_id) q = q.eq("doctor_id", params.doctor_id);
 
   // date range
   const toISO = (v: string | Date) => (v instanceof Date ? v : new Date(v)).toISOString();
+  if (params.search?.trim()) {
+    const term = params.search.trim().replace(/[%_]/g, "\\$&"); // escape % and _
+    // PostgREST OR syntax: col.ilike.%value%,other.ilike.%value%
+    q = q.or(`patient_name.ilike.%${term}%,notes.ilike.%${term}%`);
+  }
   if (params.from) q = q.gte("date_time", toISO(params.from));
   if (params.to) q = q.lt("date_time", toISO(params.to));
+
+  if (params.status) q = q.eq("status", params.status);
 
   const { data, error, count } = await q;
 
@@ -92,10 +105,33 @@ export async function listAppointmentsAction(params: ListAppointmentsParams = {}
 
   return {
     data,
-    page,
-    limit,
-    total,
-    totalPages,
+    meta: {
+      page,
+      limit,
+      total,
+      totalPages,
+    },
     status: 200 as const,
   };
+}
+
+export async function deleteAppointmentAction(id: string, opts?: { revalidate?: string }) {
+  const supabase = await createClient();
+
+  if (id === undefined || id === null || id === "") {
+    return { error: "id is required", status: 400 as const };
+  }
+
+  const { data, error } = await supabase
+    .from("apppointments")
+    .delete()
+    .eq("id", id)
+    .select("id")
+    .maybeSingle();
+
+  if (error) return { error: error.message, status: 400 as const };
+  if (!data) return { error: "Appointment not found", status: 404 as const };
+
+  if (opts?.revalidate) revalidatePath(opts.revalidate, "page");
+  return { data, status: 200 as const };
 }

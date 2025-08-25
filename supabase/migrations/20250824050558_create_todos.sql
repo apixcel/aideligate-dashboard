@@ -4,12 +4,13 @@
 CREATE TABLE public.apppointments (
   id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
-  patient_name character varying,
-  date_time timestamp with time zone,
-  service_type character varying,
+  patient_name character varying NOT NULL,
+  date_time timestamp with time zone NOT NULL,
+  service_type character varying NOT NULL,
   notes character varying,
-  doctor_id uuid DEFAULT gen_random_uuid(),
+  doctor_id uuid NOT NULL,
   client_id uuid NOT NULL,
+  status USER-DEFINED NOT NULL DEFAULT 'scheduled'::appointment_status,
   CONSTRAINT apppointments_pkey PRIMARY KEY (id),
   CONSTRAINT apppointments_doctor_id_fkey FOREIGN KEY (doctor_id) REFERENCES public.doctors(id),
   CONSTRAINT apppointments_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.clients(id)
@@ -27,11 +28,11 @@ CREATE TABLE public.calls (
 );
 CREATE TABLE public.clients (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
-  user_id uuid,
+  user_id uuid NOT NULL,
   client_name text NOT NULL,
   client_email text,
   account_status USER-DEFINED NOT NULL DEFAULT 'active'::account_status,
-  last_activity timestamp with time zone DEFAULT now(),
+  last_activity timestamp with time zone NOT NULL DEFAULT now(),
   calls_today integer NOT NULL DEFAULT 0,
   language_mix text,
   plan text NOT NULL DEFAULT 'Free Trial'::text CHECK (plan = ANY (ARRAY['Free Trial'::text, '299k'::text, '399k'::text, '699k'::text])),

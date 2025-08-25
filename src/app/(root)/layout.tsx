@@ -161,7 +161,7 @@ const PageLayout = ({ children }: { children: React.ReactNode }) => {
         className="pl-0 md:pl-16"
       >
         {/* desktop topbar */}
-        <div className="sticky top-0 z-40 border-b border-darker bg-gradient-to-b from-darkest to-black-tertiary px-4 py-3">
+        <div className="sticky top-0 z-[5] border-b border-darker bg-gradient-to-b from-darkest to-black-tertiary px-4 py-3">
           <div className="flex items-center justify-between">
             {/* sidebar toggle button & wifi status */}
             <div className="flex items-center gap-3">

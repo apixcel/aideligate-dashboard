@@ -74,8 +74,12 @@
   label {
     @apply mb-[8px] block;
   }
-  input {
+  input,
+  select {
     @apply rounded-[8px] border border-dark px-[16px] py-[8px] text-sm text-light outline-0 placeholder:text-lighter focus:border-neutral;
+  }
+  option {
+    @apply bg-darkest text-lightest;
   }
 
   textarea {
