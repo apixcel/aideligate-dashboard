@@ -1,7 +1,24 @@
 "use client";
+import { getStatistics } from "@/actions/statistics.action";
 import { CalendarDays, ChevronRight, PhoneCall, Star } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 const HomeStatisticsCards = () => {
+  const [data, setData] = useState({ appointmentsThisWeek: 0, callsToday: 0, reviewThiWeek: 0 });
+
+  useEffect(() => {
+    const statistics = async () => {
+      const res = await getStatistics();
+
+      setData({
+        appointmentsThisWeek: res.data?.appointmentsThisWeek || 0,
+        callsToday: res.data?.callsToday || 0,
+        reviewThiWeek: res.data?.reviewThiWeek || 0,
+      });
+    };
+
+    statistics();
+  }, []);
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       <div className="flex flex-col gap-6 rounded-xl border border-darker bg-darkest p-6 transition-all duration-300 hover:border-dark hover:shadow-md">
@@ -12,7 +29,7 @@ const HomeStatisticsCards = () => {
           </div>
         </div>
         <div>
-          <h3 className="text-2xl font-bold text-lighter">12</h3>
+          <h3 className="text-2xl font-bold text-lighter">{data.callsToday}</h3>
           <Link
             href="/calls"
             className="group inline-flex items-center gap-[2px] text-xs hover:underline"
@@ -31,9 +48,9 @@ const HomeStatisticsCards = () => {
           </div>
         </div>
         <div>
-          <h3 className="text-2xl font-bold text-lighter">28</h3>
+          <h3 className="text-2xl font-bold text-lighter">{data.appointmentsThisWeek}</h3>
           <Link
-            href="/calls"
+            href="/appointments"
             className="group inline-flex items-center gap-[2px] text-xs hover:underline"
           >
             Open calendar{" "}
@@ -50,9 +67,9 @@ const HomeStatisticsCards = () => {
           </div>
         </div>
         <div>
-          <h3 className="text-2xl font-bold text-lighter">5</h3>
+          <h3 className="text-2xl font-bold text-lighter">{data.reviewThiWeek}</h3>
           <Link
-            href="/calls"
+            href="/reviews"
             className="group inline-flex items-center gap-[2px] text-xs hover:underline"
           >
             Open reviews{" "}

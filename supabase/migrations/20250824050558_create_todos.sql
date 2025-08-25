@@ -1,7 +1,7 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
 
-CREATE TABLE public.apppointments (
+CREATE TABLE public.appointments (
   id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   patient_name character varying NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE public.apppointments (
   doctor_id uuid NOT NULL,
   client_id uuid NOT NULL,
   status USER-DEFINED NOT NULL DEFAULT 'scheduled'::appointment_status,
-  CONSTRAINT apppointments_pkey PRIMARY KEY (id),
+  CONSTRAINT appointments_pkey PRIMARY KEY (id),
   CONSTRAINT apppointments_doctor_id_fkey FOREIGN KEY (doctor_id) REFERENCES public.doctors(id),
   CONSTRAINT apppointments_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.clients(id)
 );
@@ -42,9 +42,20 @@ CREATE TABLE public.clients (
 );
 CREATE TABLE public.doctors (
   created_at timestamp with time zone NOT NULL DEFAULT now(),
-  full_name character varying,
-  client_id uuid DEFAULT gen_random_uuid(),
+  full_name character varying NOT NULL,
+  client_id uuid NOT NULL,
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   CONSTRAINT doctors_pkey PRIMARY KEY (id),
   CONSTRAINT doctors_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.clients(id)
+);
+CREATE TABLE public.reviews (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  client_id uuid NOT NULL,
+  user_name text NOT NULL,
+  rating smallint NOT NULL CHECK (rating >= 1 AND rating <= 5),
+  reply text,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  media character varying,
+  CONSTRAINT reviews_pkey PRIMARY KEY (id),
+  CONSTRAINT reviews_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.clients(id)
 );

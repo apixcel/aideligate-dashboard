@@ -7,8 +7,9 @@ interface IProps {
   onChange: (value: string) => void;
   className?: string;
   onBlur?: () => void;
+  defaultValue?: string;
 }
-const DoctorSelector: React.FC<IProps> = ({ onChange, className, onBlur }) => {
+const DoctorSelector: React.FC<IProps> = ({ onChange, className, onBlur, defaultValue }) => {
   const [doctors, setDoctors] = useState<IDoctor[]>([]);
 
   useEffect(() => {
@@ -21,8 +22,10 @@ const DoctorSelector: React.FC<IProps> = ({ onChange, className, onBlur }) => {
   }, []);
   return (
     <select
+      key={doctors.length}
       onBlur={onBlur}
-      className={twMerge("w-full h-fit", className)}
+      defaultValue={defaultValue}
+      className={twMerge("h-fit w-full", className)}
       onChange={(e) => onChange(e.target.value)}
     >
       <option value="" hidden>

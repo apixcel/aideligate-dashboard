@@ -25,6 +25,10 @@ const appointmenTableHeaders = [
     key: "status",
   },
   {
+    label: "Service Type",
+    key: "service_type",
+  },
+  {
     label: "Date/Time",
     key: "date_time",
   },
@@ -38,7 +42,11 @@ const appointmenTableHeaders = [
     key: "action",
   },
 ];
-const AppointmentTable = () => {
+interface IProps {
+  refetch: number;
+  setRefetch: React.Dispatch<React.SetStateAction<number>>;
+}
+const AppointmentTable: React.FC<IProps> = ({ refetch, setRefetch }) => {
   const [appointments, setAppointments] = useState<IAppointment[]>([]);
   const [query, setQuery] = useState({
     from: "",
@@ -67,7 +75,7 @@ const AppointmentTable = () => {
     };
 
     fetchAppointments();
-  }, [query, search]);
+  }, [query, search, refetch]);
 
   return (
     <div className="flex w-full flex-col gap-[20px]">
@@ -131,7 +139,10 @@ const AppointmentTable = () => {
             {/* table rows */}
             <tbody className="divide-y divide-dark last:border-0">
               {appointments.map((row) => (
-                <tr key={row.id} className="cursor-pointer text-light">
+                <tr
+                  key={row.id}
+                  className="cursor-pointer text-light duration-[0.3s] hover:bg-white/5"
+                >
                   <td className="cursor-pointer p-2 align-middle font-medium whitespace-nowrap">
                     {row.patient_name}
                   </td>
@@ -148,11 +159,14 @@ const AppointmentTable = () => {
                   </td>
 
                   <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
+                    {row.service_type}
+                  </td>
+                  <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
                     {format(new Date(row.date_time), "dd MMM yyyy, HH:mm")}
                   </td>
                   <td className="cursor-pointer p-2 align-middle whitespace-nowrap">{row.notes}</td>
                   <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
-                    <AppointmentActions appointment={row} />
+                    <AppointmentActions setRefetch={setRefetch} appointment={row} />
                   </td>
                 </tr>
               ))}

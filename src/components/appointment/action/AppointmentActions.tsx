@@ -1,14 +1,17 @@
 "use client";
 import { IAppointment } from "@/interface/appointment.interface";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { Archive, PencilIcon, Square, TrashIcon } from "lucide-react";
+import { PencilIcon, TrashIcon } from "lucide-react";
 import { useState } from "react";
+import AppointmentEditDialog from "./AppointmentEditDialog";
 import DeleteApppointmentDialog from "./DeleteApppointmentDialog";
 interface IProps {
   appointment: IAppointment;
+  setRefetch: React.Dispatch<React.SetStateAction<number>>;
 }
-const AppointmentActions: React.FC<IProps> = ({ appointment }) => {
+const AppointmentActions: React.FC<IProps> = ({ appointment, setRefetch }) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   return (
     <>
       <Menu>
@@ -26,25 +29,13 @@ const AppointmentActions: React.FC<IProps> = ({ appointment }) => {
           </div>
           <span className="my-1 flex h-[1px] w-full bg-white/10" />
           <MenuItem>
-            <button className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 hover:bg-dark">
+            <button
+              onClick={() => setIsEditDialogOpen(true)}
+              className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 hover:bg-dark"
+            >
               <PencilIcon className="size-4" />
               Edit
               <kbd className="ml-auto hidden font-sans text-xs text-white/50">⌘E</kbd>
-            </button>
-          </MenuItem>
-          <MenuItem>
-            <button className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 hover:bg-dark">
-              <Square className="size-4" />
-              Duplicate
-              <kbd className="ml-auto hidden font-sans text-xs text-white/50">⌘D</kbd>
-            </button>
-          </MenuItem>
-          <span className="my-1 h-px bg-white/5" />
-          <MenuItem>
-            <button className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 hover:bg-dark">
-              <Archive className="size-4" />
-              Archive
-              <kbd className="ml-auto hidden font-sans text-xs text-white/50">⌘A</kbd>
             </button>
           </MenuItem>
           <MenuItem>
@@ -61,9 +52,17 @@ const AppointmentActions: React.FC<IProps> = ({ appointment }) => {
       </Menu>
 
       <DeleteApppointmentDialog
+        onDelete={() => setRefetch((prev) => prev + 1)}
         appointment={appointment}
         isOpen={isDeleteDialogOpen}
         setIsopen={setIsDeleteDialogOpen}
+      />
+
+      <AppointmentEditDialog
+        appointment={appointment}
+        onSuccess={() => setRefetch((prev) => prev + 1)}
+        isOpen={isEditDialogOpen}
+        setIsopen={setIsEditDialogOpen}
       />
     </>
   );

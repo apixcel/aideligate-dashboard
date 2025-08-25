@@ -1,13 +1,13 @@
 "use client";
 
+import { SectionSubTitle } from "@/components";
 import { cn } from "@/utils";
 import { Filter } from "lucide-react";
 import { useState } from "react";
 import AllTabs from "./AllTabs";
-import CallTabs from "./CallTabs";
 import AppointmentsTabs from "./AppointmentsTabs";
+import CallTabs from "./CallTabs";
 import ReviewsTabs from "./ReviewsTabs";
-import { SectionSubTitle } from "@/components";
 
 const tabs = [
   {

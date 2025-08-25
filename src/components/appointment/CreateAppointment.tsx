@@ -1,35 +1,45 @@
 "use client";
-import { createAppointmentAction } from "@/actions/appointment.action";
+import { createAppointmentAction, updateAppointmentAction } from "@/actions/appointment.action";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import * as Yup from "yup";
 import DoctorSelector from "./DoctorSelector";
+const initialValues = {
+  patient_name: "",
+  doctor_id: "",
+  service_type: "",
+  date: "",
+  time: "",
+  notes: "",
+};
 
-export default function CreateAppointmentModal() {
+const AppointmentSchema = Yup.object({
+  patient_name: Yup.string().trim().required("Patient name is required"),
+  doctor_id: Yup.string().required("Select a provider"),
+  service_type: Yup.string().required("Select a service"),
+  date: Yup.string().required("Choose a date"),
+  time: Yup.string().required("Choose a time"),
+  notes: Yup.string().max(500, "Notes must be at most 500 characters"),
+});
+
+interface IProps {
+  defaultValues?: typeof initialValues & { id: string };
+  isOpen?: boolean;
+  setIsopen?: React.Dispatch<React.SetStateAction<boolean>>;
+  renderTrigger?: boolean;
+  onSuccess?: () => void;
+}
+const CreateAppointment: React.FC<IProps> = ({
+  defaultValues,
+  isOpen,
+  setIsopen,
+  renderTrigger = true,
+  onSuccess,
+}) => {
   const [open, setOpen] = useState(false);
-  const router = useRouter();
-
-  const initialValues = {
-    patient_name: "",
-    doctor_id: "",
-    service_type: "",
-    date: "",
-    time: "",
-    notes: "",
-  } as const;
-
-  const AppointmentSchema = Yup.object({
-    patient_name: Yup.string().trim().required("Patient name is required"),
-    doctor_id: Yup.string().required("Select a provider"),
-    service_type: Yup.string().required("Select a service"),
-    date: Yup.string().required("Choose a date"),
-    time: Yup.string().required("Choose a time"),
-    notes: Yup.string().max(500, "Notes must be at most 500 characters"),
-  });
 
   // In a real app, replace with an API call
   const handleSubmit = async (
@@ -59,30 +69,44 @@ export default function CreateAppointmentModal() {
         service_type: values.service_type,
         notes: values.notes,
         date_time: dateTime.toISOString(), // timestamptz
+        id: defaultValues?.id,
       };
 
       // Simulate network call
 
-      await createAppointmentAction(payload);
+      const mutation = defaultValues ? updateAppointmentAction : createAppointmentAction;
+
+      const res = await mutation(payload);
+
+      if (res?.error) {
+        toast.error(res.error);
+        setSubmitting(false);
+        return;
+      }
 
       resetForm();
-      router.refresh();
       setOpen(false);
+      setIsopen?.(false);
+      onSuccess?.();
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <div className="p-4">
-      <button
-        onClick={() => setOpen(true)}
-        className="flex items-center justify-center gap-[10px] rounded-[8px] bg-brand-blue-2 px-[15px] py-[8px] text-white"
-      >
-        New Appointment <Plus />
-      </button>
+    <>
+      {renderTrigger ? (
+        <button
+          onClick={() => setOpen(true)}
+          className="flex items-center justify-center gap-[10px] rounded-[8px] bg-brand-blue-2 px-[15px] py-[8px] text-white"
+        >
+          New Appointment <Plus />
+        </button>
+      ) : (
+        ""
+      )}
 
-      <Dialog open={open} onClose={setOpen} className="relative z-50">
+      <Dialog open={isOpen || open} onClose={setIsopen || setOpen} className="relative z-50">
         <div className="fixed inset-0 bg-black/40" aria-hidden="true" />
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -91,7 +115,7 @@ export default function CreateAppointmentModal() {
               <div className="flex items-start justify-between">
                 <div>
                   <DialogTitle className="text-lg font-semibold">
-                    Create New Appointment
+                    {defaultValues ? "Update Appointment" : "Create New Appointment"}
                   </DialogTitle>
                   <p className="mt-1 text-sm">Fill in the appointment details below</p>
                 </div>
@@ -116,7 +140,7 @@ export default function CreateAppointmentModal() {
               </div>
 
               <Formik
-                initialValues={initialValues}
+                initialValues={defaultValues || initialValues}
                 validationSchema={AppointmentSchema}
                 onSubmit={handleSubmit}
               >
@@ -146,6 +170,7 @@ export default function CreateAppointmentModal() {
                         Provider
                       </label>
                       <DoctorSelector
+                        defaultValue={defaultValues?.doctor_id}
                         onBlur={() => setFieldTouched("doctor_id", true)}
                         onChange={(e) => setFieldValue("doctor_id", e)}
                       />
@@ -170,9 +195,9 @@ export default function CreateAppointmentModal() {
                         <option value="" hidden>
                           Select service
                         </option>
-                        <option value="consultation">Consultation</option>
-                        <option value="follow_up">Follow-up</option>
-                        <option value="physical">Physical Exam</option>
+                        <option value="Consultation">Consultation</option>
+                        <option value="Follow-up">Follow-up</option>
+                        <option value="Physical Exam">Physical Exam</option>
                       </Field>
                       <ErrorMessage
                         name="service_type"
@@ -251,6 +276,8 @@ export default function CreateAppointmentModal() {
           </div>
         </div>
       </Dialog>
-    </div>
+    </>
   );
-}
+};
+
+export default CreateAppointment;

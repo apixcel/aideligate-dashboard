@@ -2,7 +2,8 @@ import { deleteAppointmentAction } from "@/actions/appointment.action";
 import { IAppointment } from "@/interface/appointment.interface";
 import { Dialog, Transition } from "@headlessui/react";
 import { format } from "date-fns";
-import React, { Fragment } from "react";
+import { LoaderCircle } from "lucide-react";
+import React, { Fragment, useState } from "react";
 import { toast } from "sonner";
 
 interface IProps {
@@ -20,10 +21,13 @@ const DeleteApppointmentDialog: React.FC<IProps> = ({
   onDelete,
 }) => {
   const close = () => setIsopen(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleDelete = async () => {
     try {
+      setIsLoading(true);
       const res = await deleteAppointmentAction(appointment.id);
+      setIsLoading(false);
       if (res.error) {
         return toast.error(res.error);
       }
@@ -101,11 +105,12 @@ const DeleteApppointmentDialog: React.FC<IProps> = ({
                     Cancel
                   </button>
                   <button
+                    disabled={isLoading}
                     type="button"
                     onClick={handleDelete}
-                    className="inline-flex items-center rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-500 focus:ring-2 focus:ring-red-400 focus:outline-none"
+                    className="inline-flex items-center rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-500 focus:ring-2 focus:ring-red-400 focus:outline-none disabled:cursor-not-allowed"
                   >
-                    Delete
+                    Delete {isLoading ? <LoaderCircle className="animate-spin" /> : ""}
                   </button>
                 </div>
               </Dialog.Panel>
