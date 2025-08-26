@@ -1,7 +1,6 @@
 "use client";
-import { forgotPasswordAction, updateEmail } from "@/actions/auth.action";
+import { forgotPasswordAction } from "@/actions/auth.action";
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
-import { useEffect } from "react";
 import { toast } from "sonner";
 import * as Yup from "yup";
 const initialValues = {
@@ -28,11 +27,6 @@ const ForgotPasswordPage = () => {
     helper.resetForm();
   };
 
-  useEffect(() => {
-    updateEmail("sakib@apixcel.com").then((res) => {
-      console.log(res);
-    });
-  }, []);
   return (
     <div>
       <div className="flex flex-col gap-2 text-center">
