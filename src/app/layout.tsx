@@ -1,5 +1,7 @@
+import I18nProvider from "@/providers/I18nProvider";
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
+import { Suspense } from "react";
 import { Toaster } from "sonner";
 import "./globals.css";
 
@@ -22,7 +24,9 @@ export default function RootLayout({
     <html lang="en">
       <body suppressHydrationWarning={true} className={`${dmSans.variable} antialiased`}>
         <Toaster position="top-center" richColors />
-        {children}
+        <I18nProvider>
+          <Suspense>{children}</Suspense>
+        </I18nProvider>
       </body>
     </html>
   );
