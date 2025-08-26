@@ -6,8 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface IProps {
-  onChange?: (value: { value: string; label: string }) => void;
-  data: { value: string; label: string }[];
+  onChange?: (value: { value: string | number; label: string | number }) => void;
+  data: { value: string | number; label: string | number }[];
   className?: string;
 }
 

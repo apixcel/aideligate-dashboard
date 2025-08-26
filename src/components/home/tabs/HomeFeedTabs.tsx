@@ -4,24 +4,24 @@ import { SectionSubTitle } from "@/components";
 import { cn } from "@/utils";
 import { Filter } from "lucide-react";
 import { useState } from "react";
-import AllTabs from "./AllTabs";
 import AppointmentsTabs from "./AppointmentsTabs";
 import CallTabs from "./CallTabs";
 import ReviewsTabs from "./ReviewsTabs";
 
 const tabs = [
+  // {
+  //   label: "All",
+  //   value: "all",
+  // },
   {
-    label: "All",
-    value: "all",
+    label: "Appointments",
+    value: "appointments",
   },
   {
     label: "Calls",
     value: "calls",
   },
-  {
-    label: "Appointments",
-    value: "appointments",
-  },
+
   {
     label: "Reviews",
     value: "reviews",
@@ -29,7 +29,7 @@ const tabs = [
 ];
 
 const HomeFeedTabs = () => {
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeTab, setActiveTab] = useState(tabs[0].value);
 
   return (
     <div className="flex flex-col gap-6 rounded-xl border border-darker bg-darkest p-6 transition-all duration-300">
@@ -60,9 +60,9 @@ const HomeFeedTabs = () => {
       </div>
 
       <div>
-        {activeTab === "all" && <AllTabs />}
-        {activeTab === "calls" && <CallTabs />}
+        {/* {activeTab === "all" && <AllTabs />} */}
         {activeTab === "appointments" && <AppointmentsTabs />}
+        {activeTab === "calls" && <CallTabs />}
         {activeTab === "reviews" && <ReviewsTabs />}
       </div>
     </div>

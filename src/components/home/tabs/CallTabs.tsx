@@ -1,5 +1,10 @@
+import { getClientCallsAction } from "@/actions/call.action";
+import HomeCardSkeleton from "@/components/ui/HomeCardSkeleton";
+import { ICall } from "@/interface/call.interface";
 import { IFeedCard } from "@/types";
+import { format } from "date-fns";
 import { Phone } from "lucide-react";
+import { useEffect, useState } from "react";
 import HomeFeedTabCard from "./HomeFeedTabCard";
 
 const callTabsTableData: IFeedCard[] = [
@@ -20,11 +25,42 @@ const callTabsTableData: IFeedCard[] = [
 ];
 
 const CallTabs = () => {
+  const [calls, setCalls] = useState<ICall[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetch = async () => {
+      setIsLoading(true);
+      const res = await getClientCallsAction({
+        page: 1,
+        pageSize: 5,
+      });
+      setIsLoading(false);
+      if (res.data) {
+        setCalls(res.data);
+      }
+    };
+    fetch();
+  }, []);
   return (
     <div className="flex flex-col gap-4 divide-y divide-darker">
-      {callTabsTableData.map((item) => (
-        <HomeFeedTabCard key={item.id} item={item} />
-      ))}
+      {isLoading ? (
+        <HomeCardSkeleton number={5} />
+      ) : (
+        calls.map((item) => {
+          const data: IFeedCard = {
+            id: item.id,
+            icon: Phone,
+            title: `New call from ${item.caller_number} at ${format(
+              new Date(item.call_time),
+              "hh:mm a"
+            )}`,
+            action: "call",
+            time: format(new Date(item.created_at), "MMM dd, h:mm a"),
+          };
+          return <HomeFeedTabCard key={item.id} item={data} />;
+        })
+      )}
     </div>
   );
 };

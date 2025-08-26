@@ -1,30 +1,46 @@
+import { getAppointments } from "@/actions/appointment.action";
+import HomeCardSkeleton from "@/components/ui/HomeCardSkeleton";
+import { IAppointment } from "@/interface/appointment.interface";
 import { IFeedCard } from "@/types";
+import { format } from "date-fns";
 import { Calendar } from "lucide-react";
+import { useEffect, useState } from "react";
 import HomeFeedTabCard from "./HomeFeedTabCard";
 
-const appointmentsTabsTableData: IFeedCard[] = [
-  {
-    id: "2",
-    icon: Calendar,
-    title: "Appointment booked with Dr. Smith, tomorrow at 10:00 AM",
-    action: "appointment",
-    time: "5 minutes ago",
-  },
-  {
-    id: "5",
-    icon: Calendar,
-    title: "Appointment rescheduled by Mike Wilson",
-    action: "appointment",
-    time: "1 hour ago",
-  },
-];
-
 const AppointmentsTabs = () => {
+  const [appointments, setAppointments] = useState<IAppointment[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetch = async () => {
+      setIsLoading(true);
+      const res = await getAppointments({
+        page: 1,
+        limit: 5,
+      });
+      setIsLoading(false);
+      if (res.data) {
+        setAppointments(res.data);
+      }
+    };
+    fetch();
+  }, []);
   return (
     <div className="flex flex-col gap-4 divide-y divide-darker">
-      {appointmentsTabsTableData.map((item) => (
-        <HomeFeedTabCard key={item.id} item={item} />
-      ))}
+      {isLoading ? (
+        <HomeCardSkeleton />
+      ) : (
+        appointments.map((item) => {
+          const data: IFeedCard = {
+            action: "appointment",
+            icon: Calendar,
+            time: format(new Date(item.date_time), "MMM dd, h:mm a"),
+            id: item.id,
+            title: `Appointment with ${item.patient_name}`,
+          };
+          return <HomeFeedTabCard key={item.id} item={data} />;
+        })
+      )}
     </div>
   );
 };

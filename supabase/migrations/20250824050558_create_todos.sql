@@ -56,6 +56,17 @@ CREATE TABLE public.reviews (
   reply text,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   media character varying,
+  text text NOT NULL DEFAULT ''::text,
   CONSTRAINT reviews_pkey PRIMARY KEY (id),
   CONSTRAINT reviews_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.clients(id)
+);
+CREATE TABLE public.time_block (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  start_time time with time zone NOT NULL,
+  end_time time with time zone NOT NULL,
+  day_of_week smallint NOT NULL,
+  client_id uuid NOT NULL,
+  CONSTRAINT time_block_pkey PRIMARY KEY (id),
+  CONSTRAINT time_block_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.clients(id)
 );
