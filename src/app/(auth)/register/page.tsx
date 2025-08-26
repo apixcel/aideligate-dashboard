@@ -18,12 +18,13 @@ const RegisterSchema = Yup.object({
     .matches(/\d/, "Include a number")
     .matches(/[^A-Za-z0-9]/, "Include a symbol")
     .required("Password is required"),
+  full_name: Yup.string().required("Please enter your full name"),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password")], "Passwords must match")
     .required("Confirm your password"),
 });
 
-const initialvalue = { email: "", password: "", confirmPassword: "" };
+const initialvalue = { email: "", password: "", confirmPassword: "", full_name: "" };
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -40,6 +41,7 @@ const Register = () => {
     const res = await signUpAction({
       email: values.email,
       password: values.password,
+      full_name: values.full_name,
       role: "staff",
     });
     helper.setSubmitting(false);
@@ -110,7 +112,21 @@ const Register = () => {
           >
             {({ isSubmitting }) => (
               <Form className="flex flex-col gap-4">
-                {/* email */}
+                <div>
+                  <label htmlFor="full_name">Full name</label>
+                  <Field
+                    id="full_name"
+                    name="full_name"
+                    type="full_name"
+                    placeholder="Enter your email"
+                    className="w-full"
+                  />
+                  <ErrorMessage
+                    name="full_name"
+                    component="p"
+                    className="mt-1 text-sm text-red-500"
+                  />
+                </div>
                 <div>
                   <label htmlFor="email">Email</label>
                   <Field

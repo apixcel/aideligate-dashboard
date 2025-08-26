@@ -1,7 +1,6 @@
 "use client";
 
 import { signInAction } from "@/actions/auth.action";
-import { LoginAsFilter } from "@/components";
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
@@ -21,13 +20,11 @@ const LoginSchema = Yup.object({
       return emailRegex.test(value) || usernameRegex.test(value);
     }),
   password: Yup.string().min(8, "At least 8 characters").required("Password is required"),
-  role: Yup.string().optional(),
 });
 
 const initialValues = {
   identifier: "",
   password: "",
-  role: "", // populated by LoginAsFilter
 };
 
 const Login = () => {
@@ -103,15 +100,6 @@ const Login = () => {
               </div>
               <ErrorMessage name="password" component="p" className="mt-1 text-sm text-red-500" />
             </div>
-
-            {/* login as filter */}
-            <LoginAsFilter
-              onChange={(role) => {
-                setFieldValue("role", role?.value ?? "");
-                console.log(role?.value);
-              }}
-            />
-            <ErrorMessage name="role" component="p" className="mt-1 text-sm text-red-500" />
 
             {/* submit button */}
             <button

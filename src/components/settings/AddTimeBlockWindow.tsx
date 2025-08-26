@@ -37,7 +37,18 @@ const schema = Yup.object({
       return toMinutes(value) > toMinutes(start_time);
     }),
 });
+function toTimetzLiteral(hhmm: string, at: Date = new Date()) {
+  // getTimezoneOffset = minutes to add to *local* to get UTC (Dhaka => -360)
+  const tzOffsetMin = at.getTimezoneOffset();
+  const sign = tzOffsetMin <= 0 ? "+" : "-";
+  const abs = Math.abs(tzOffsetMin);
+  const hh = String(Math.floor(abs / 60)).padStart(2, "0");
+  const mm = String(abs % 60).padStart(2, "0");
+  const offset = `${sign}${hh}:${mm}`;
 
+  const [h, m = "00"] = hhmm.split(":");
+  return `${h.padStart(2, "0")}:${m.padStart(2, "0")}:00${offset}`;
+}
 const AddTimeBlockWindow = ({
   onAdd,
   label,
@@ -52,10 +63,16 @@ const AddTimeBlockWindow = ({
     payload: typeof initialValues,
     helper: FormikHelpers<typeof initialValues>
   ) => {
+    const start_timetz = toTimetzLiteral(payload.start_time); // e.g. "13:00:00+06:00"
+    const end_timetz = toTimetzLiteral(payload.end_time); // e.g. "14:00:00+06:00"
+
     helper.setSubmitting(true);
-    await createTimeBlocks([payload]);
+    console.log({ ...payload, start_time: start_timetz, end_time: end_timetz }); // {day_of_week: 1, start_time: '13:00', end_time: '14:00'}
+
+    await createTimeBlocks([{ ...payload, start_time: start_timetz, end_time: end_timetz }]); //
     helper.setSubmitting(false);
     onAdd?.(payload);
+    close();
   };
   return (
     <>
