@@ -180,7 +180,7 @@ const Reviews = () => {
           <span>Source</span>
           <DropDownSelector
             className="w-full max-w-[150px]"
-            onChange={(value) => setQuery({ ...query, media: value.value })}
+            onChange={(value) => setQuery({ ...query, media: value.value as string })}
             data={[
               { value: "", label: "All" },
               { value: "facebook", label: "Facebook" },
