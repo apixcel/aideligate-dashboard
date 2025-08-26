@@ -4,7 +4,10 @@ import { IUserSignUp } from "@/interface/auth.interface";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-async function ensureDefaultClient(supabase: ReturnType<typeof createClient>) {
+async function ensureDefaultClient(
+  supabase: ReturnType<typeof createClient>,
+  { client_email, client_name }: { client_email: string; client_name: string }
+) {
   // Only need minimal fields; triggers & defaults will fill the rest.
   const { data: existing, error: existingErr } = await (await supabase)
     .from("clients")
@@ -19,8 +22,8 @@ async function ensureDefaultClient(supabase: ReturnType<typeof createClient>) {
   )
     .from("clients")
     .insert({
-      client_name: "My Client",
-      client_email: null,
+      client_name,
+      client_email,
       plan: "Free Trial", // allowed: Free Trial, 299k, 399k, 699k
       account_status: "active", // enum default is also fine
       language_mix: null,
@@ -41,9 +44,11 @@ export const signUpAction = async (payload: IUserSignUp) => {
   const { data, error } = await supabase.auth.signUp({
     email: payload.email,
     password: payload.password,
+
     options: {
       emailRedirectTo: redirectTo,
       data: {
+        display_name: payload.full_name,
         role: payload.role || "staff",
       },
     },
@@ -96,7 +101,10 @@ export const verifyEmail = async (code: string) => {
   }
 
   try {
-    await ensureDefaultClient(Promise.resolve(supabase));
+    await ensureDefaultClient(Promise.resolve(supabase), {
+      client_email: data.user.email!,
+      client_name: data.user.user_metadata.display_name || "N/A",
+    });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
     // Non-fatal for login, but log if you have telemetry
