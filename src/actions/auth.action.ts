@@ -109,9 +109,14 @@ export const verifyEmail = async (code: string) => {
   };
 };
 
-export const forgotPassword = async (email: string) => {
+export const forgotPasswordAction = async (email: string) => {
   const supabase = await createClient();
-  const { error } = await supabase.auth.resetPasswordForEmail(email);
+  const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
+  const redirectTo = `${BASE_URL}/reset-password`;
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: redirectTo,
+  });
   if (error) {
     return {
       error: error.message,
@@ -122,6 +127,20 @@ export const forgotPassword = async (email: string) => {
     error: null,
     status: 200,
   };
+};
+export const updatePassword = async (newPassword: string, token: string) => {
+  const supabase = await createClient();
+  const { error: authError } = await supabase.auth.exchangeCodeForSession(token);
+  if (authError) return { error: authError.message };
+  const { error } = await supabase.auth.updateUser({ password: newPassword });
+  await supabase.auth.signOut();
+  return { error: error?.message };
+};
+
+export const updateEmail = async (newEmail: string) => {
+  const supabase = await createClient();
+  const { error } = await supabase.auth.updateUser({ email: newEmail });
+  return { error: error?.message };
 };
 
 export const whoAmI = async () => {

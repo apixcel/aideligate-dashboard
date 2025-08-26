@@ -4,7 +4,13 @@ import { NextResponse, type NextRequest } from "next/server";
 export async function middleware(req: NextRequest) {
   const { supabase, response } = createClient(req);
 
-  const publicRoutes = ["/login", "/register", "/forgot-password", "/verification"];
+  const publicRoutes = [
+    "/login",
+    "/register",
+    "/forgot-password",
+    "/verification",
+    "/reset-password",
+  ];
 
   const {
     data: { user },

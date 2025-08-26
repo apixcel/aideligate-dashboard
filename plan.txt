@@ -1,0 +1,6 @@
+monthly_calls:number (-1 for unlimited)
+monthly_appointments:number (-1 for unlimited)
+priotity_suppport:boolean
+sms_n_email_template:boolean
+review_management:boolean
+client_id:uuid()
