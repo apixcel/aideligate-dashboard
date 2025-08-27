@@ -1,4 +1,4 @@
-import { IAppointment } from "@/interface/appointment.interface";
+import { IAppointment, TAppointmentStatus } from "@/interface/appointment.interface";
 import { format } from "date-fns";
 import CreateAppointment from "../CreateAppointment";
 
@@ -22,6 +22,7 @@ const AppointmentEditDialog: React.FC<IProps> = ({ appointment, isOpen, setIsope
       setIsopen={setIsopen}
       defaultValues={{
         ...appointment,
+        status: appointment.status as TAppointmentStatus,
         date: date,
         time: time,
         notes: appointment.notes || "",

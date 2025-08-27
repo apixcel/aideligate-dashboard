@@ -199,10 +199,14 @@ const CreateAppointment: React.FC<IProps> = ({
                             {t("appointments.status")}
                           </label>
                           <DropDownSelector
-                            defaultValue={{
-                              value: defaultValues?.status?.toLocaleLowerCase() || "",
-                              label: defaultValues?.status || "",
-                            }}
+                            defaultValue={
+                              defaultValues.status
+                                ? {
+                                    value: defaultValues?.status?.toLocaleLowerCase(),
+                                    label: defaultValues?.status,
+                                  }
+                                : undefined
+                            }
                             onChange={(e) => setFieldValue("status", e.value)}
                             className="w-full"
                             data={[
