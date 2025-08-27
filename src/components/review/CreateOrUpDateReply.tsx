@@ -6,6 +6,7 @@ import type { IReview } from "@/interface/review.interface";
 import { Dialog, Transition } from "@headlessui/react";
 import { X } from "lucide-react";
 import { Fragment, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   review: IReview;
@@ -26,6 +27,8 @@ const Star = ({ filled }: { filled: boolean }) => (
 );
 
 export default function CreateOrUpDateReply({ review, onSuccess }: Props) {
+  
+ const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [reply, setReply] = useState(review.reply ?? "");
   const [saving, setSaving] = useState(false);
@@ -44,6 +47,7 @@ export default function CreateOrUpDateReply({ review, onSuccess }: Props) {
       setSaving(false);
     }
   }
+
 
   return (
     <>
@@ -122,7 +126,7 @@ export default function CreateOrUpDateReply({ review, onSuccess }: Props) {
 
                   {/* Reply form */}
                   <form onSubmit={handleSubmit} className="mt-4">
-                    <label className="mb-1 block text-sm font-medium">Your Reply</label>
+                    <label className="mb-1 block text-sm font-medium"> {t("reviews.your_reply")} </label>
                     <div className="relative">
                       <textarea
                         value={reply}

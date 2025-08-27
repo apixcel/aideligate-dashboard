@@ -10,12 +10,12 @@ const Page = () => {
   return (
     <div className="flex w-full flex-col gap-6">
       <SectionTitle
-        title={t("dashboard_Overview.appointments")}
-        description="Manage and track all your appointments. New appointments will appear automatically."
+        title={t("dashboard_overview.title")}
+        description= {t("dashboard_overview.description")}
       />
       <div className="flex flex-col gap-6 rounded-xl border border-darker bg-darkest p-6 transition-all duration-300">
         <div className="flex items-center justify-between gap-[10px]">
-          <SectionSubTitle title="All Appointments" description="View filter/create appointments" />
+          <SectionSubTitle title={t("appointments.all_appointments")} description={t("appointments.view_filter_create")} />
           <div className="flex items-center justify-between">
             <CreateAppointment onSuccess={() => setRefetch(refetch + 1)} />
           </div>

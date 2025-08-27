@@ -1,12 +1,17 @@
+"use client"
 import { HomeFeedTabs, HomeStatisticsCards, SectionTitle } from "@/components";
 import CreateAppointment from "@/components/appointment/CreateAppointment";
 import AddTimeBlockWindow from "@/components/settings/AddTimeBlockWindow";
+
+import { useTranslation } from "react-i18next";
+
 const Home = () => {
+    const {t} = useTranslation();
   return (
     <>
       <SectionTitle
-        title="Dashboard Overview"
-        description="Welcome back! Here's what's happening with your business today."
+        title={t("dashboard_overview.title")}
+        description={t("dashboard_overview.description")}
       />
 
       {/* statistics cards component */}
@@ -15,7 +20,7 @@ const Home = () => {
       {/* quick actions button */}
       <div className="flex gap-4">
         <CreateAppointment />
-        <AddTimeBlockWindow label="Add Time Block" />
+        <AddTimeBlockWindow label={t("dashboard_overview.add_time_block")} />
       </div>
 
       {/* feed tabs component */}

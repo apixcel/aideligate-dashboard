@@ -1,15 +1,18 @@
+"use client";
 import { SectionSubTitle } from "@/components";
 import { Calendar, ChartColumn, Phone, Star } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const UsageStatistics = () => {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col gap-6 rounded-xl border border-darker bg-darkest p-6">
       <div>
         {/* section sub title */}
         <SectionSubTitle
           icon={ChartColumn}
-          title="Current Plan"
-          description="Your subscription details and usage limits"
+          title={t("usage_plan.current_plan")}
+          description={t("usage_plan.your_subscription_details_and_usage_limits")}
         />
       </div>
 
@@ -21,8 +24,8 @@ const UsageStatistics = () => {
               <Phone className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm font-medium">Calls This Month</p>
-              <p className="text-xs text-light">Total incoming &amp; outgoing</p>
+              <p className="text-sm font-medium">{t("usage_plan.calls_this_month")}</p>
+              <p className="text-xs text-light">{t("usage_plan.total_incoming_outgoing")}</p>
             </div>
           </div>
           <div className="text-right">
@@ -37,8 +40,8 @@ const UsageStatistics = () => {
               <Calendar className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm font-medium">Appointments</p>
-              <p className="text-xs text-light">Scheduled this month</p>
+              <p className="text-sm font-medium">{t("usage_plan.appointments")}</p>
+              <p className="text-xs text-light">{t("usage_plan.scheduled_this_month")}</p>
             </div>
           </div>
           <div className="text-right">
@@ -53,8 +56,8 @@ const UsageStatistics = () => {
               <Star className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm font-medium">Reviews</p>
-              <p className="text-xs text-light">New reviews received</p>
+              <p className="text-sm font-medium">{t("usage_plan.reviews")}</p>
+              <p className="text-xs text-light">{t("usage_plan.new_reviews_received")}</p>
             </div>
           </div>
           <div className="text-right">
@@ -65,13 +68,13 @@ const UsageStatistics = () => {
 
       <div className="grid grid-cols-2 gap-4 border-t border-darker pt-4">
         <div className="text-center">
-          <p className="text-sm text-light">Avg Call Duration</p>
+          <p className="text-sm text-light">{t("usage_plan.avg_call_duration")}</p>
           <p className="text-lg font-semibold">8:45</p>
         </div>
 
         <div className="text-center">
-          <p className="text-sm text-light">Peak Usage Day</p>
-          <p className="text-lg font-semibold">Monday</p>
+          <p className="text-sm text-light">{t("usage_plan.peak_usage_day")}</p>
+          <p className="text-lg font-semibold">{t("usage_plan.monday")}</p>
         </div>
       </div>
     </div>

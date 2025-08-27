@@ -8,7 +8,7 @@
       "settings": "Settings",
       "usage_plan": "Usage Plan"
     },
-    "dashboard_Overview": {
+    "dashboard_overview": {
       "title": "Dashboard Overview",
       "description": "Welcome back! Here's what's happening with your business today.",
       "calls_today": "Calls Today",
@@ -20,10 +20,12 @@
       "new_appointments": "New Appointments",
       "add_time_block": "Add Time Block",
       "live_activity": "Live Activity Feed",
+      "recent_activity": "Recent activity across your business",
       "appointments": "Appointments",
       "calls": "Calls",
       "reviews": "Reviews",
-      "appointments_with": "Appointments with"
+      "appointments_with": "Appointments with",
+      "new_call_from": "New call from"
     },
      "calls": {
       "title":"Calls",
@@ -31,7 +33,7 @@
       "call_Management":"Call Management",
       "view_Filter_manage": "View, filter, and manage all incoming and outgoing calls",
       "search": "Search",
-      "status": "Status",
+       "status": "Status",
       "all_status": "All Status",
       "completed": "Completed",
       "missed": "Missed",
@@ -46,18 +48,31 @@
       "action": "Action",
       "row_per_page": "Rows Per Page",
       "page": "Page",
+      "of": "of",
       "prev": "Prev",
       "next": "Next"
+    },
+    "Provider":{
+      "title": "Providers",
+      "description": "Manage your providers",
+      "all_providers": "All Providers",
+      "manage_your_service": "Manage your service providers",
+      "create_provider": "Create Provider",
+      "edit_provider": "Edit Provider",
+      "full_name": "Full Name",
+      "date_joined": "Date Joined",
+      "actions": "Actions"
     },
     "appointments": {
       "title": "Appointments",
       "description": "Manage and track all your appointments. New appointments will appear automatically.",
-      "all_Appointments": "All Appointments",
-      "view_Filter_create": "View filter/create appointments",
+      "all_appointments": "All Appointments",
+      "view_filter_create": "View filter/create appointments",
       "search": "Search",
       "new_appointments": "New Appointments",
+      "update_appointment": "Update Appointment",
       "create_new_appointment": "Create New Appointment",
-      "fill_in_the_appointment_details_below": "Fill in the appointment details below",
+      "fill_in_the_appointment": "Fill in the appointment details below",
       "patient_name": "Patient Name",
       "enter_patient_name": "Enter patient name",
       "provider": "Provider",
@@ -89,7 +104,7 @@
     "reviews":{
       "title": "Reviews",
       "description": "Manage customer reviews and feedback from all platforms",
-      "customer_Reviews":"Customer Reviews",
+      "customer_reviews":"Customer Reviews",
       "view_and_respond":"View and respond to reviews from Google, Facebook, and TripAdvisor",
       "sentiment":"Sentiment",
       "all":"All",
@@ -114,7 +129,9 @@
     "settings": {
       "time_Block_Steering": "Time Block Steering",
       "steer_bookings": "Steer bookings toward preferred windows.",
-      "preferred_Time_Windows": "Preferred Time Windows",
+      "preferred_Time_windows": "Preferred Time Windows",
+      "from": "From",
+      "to": "To",
       "add_window":"Add Window",
       "add_time_window":"Add Time Window",
       "day_to_week":"Day to Week",
@@ -122,12 +139,12 @@
       "end_time":"End Time",
       "cancel": "Cancel",
       "add": "Add",
-      "emergency_Pause": "Emergency Pause",
+      "emergency_pause": "Emergency Pause",
       "temporarily_pause":"Temporarily pause all appointment scheduling",
       "save_changes": "Save Changes",
       "language_preference": "Language Preference",
       "all_interface_text_supports": "All interface text supports EN/VI via JSON resources.",
-      "interface_Language": "Interface Language"
+      "interface_language": "Interface Language"
     },
     "usage_plan": {
       "title": "Usage & Plan",

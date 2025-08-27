@@ -1,3 +1,5 @@
+"use client";
+
 import { getClientCallsAction } from "@/actions/call.action";
 import HomeCardSkeleton from "@/components/ui/HomeCardSkeleton";
 import { ICall } from "@/interface/call.interface";
@@ -6,8 +8,11 @@ import { format } from "date-fns";
 import { Phone } from "lucide-react";
 import { useEffect, useState } from "react";
 import HomeFeedTabCard from "./HomeFeedTabCard";
+import { useTranslation } from "react-i18next";
 
 const callTabsTableData: IFeedCard[] = [
+
+
   {
     id: "1",
     icon: Phone,
@@ -42,6 +47,8 @@ const CallTabs = () => {
     };
     fetch();
   }, []);
+
+  const {t} = useTranslation();
   return (
     <div className="flex flex-col gap-4 divide-y divide-darker">
       {isLoading ? (
@@ -51,7 +58,7 @@ const CallTabs = () => {
           const data: IFeedCard = {
             id: item.id,
             icon: Phone,
-            title: `New call from ${item.caller_number} at ${format(
+            title: `${t("dashboard_overview.new_call_from")} ${item.caller_number} at ${format(
               new Date(item.call_time),
               "hh:mm a"
             )}`,

@@ -1,3 +1,4 @@
+"use client";
 import { getAppointments } from "@/actions/appointment.action";
 import HomeCardSkeleton from "@/components/ui/HomeCardSkeleton";
 import { IAppointment } from "@/interface/appointment.interface";
@@ -6,6 +7,7 @@ import { format } from "date-fns";
 import { Calendar } from "lucide-react";
 import { useEffect, useState } from "react";
 import HomeFeedTabCard from "./HomeFeedTabCard";
+import { useTranslation } from "react-i18next";
 
 const AppointmentsTabs = () => {
   const [appointments, setAppointments] = useState<IAppointment[]>([]);
@@ -25,6 +27,8 @@ const AppointmentsTabs = () => {
     };
     fetch();
   }, []);
+
+  const {t} = useTranslation();
   return (
     <div className="flex flex-col gap-4 divide-y divide-darker">
       {isLoading ? (
@@ -36,7 +40,7 @@ const AppointmentsTabs = () => {
             icon: Calendar,
             time: format(new Date(item.date_time), "MMM dd, h:mm a"),
             id: item.id,
-            title: `Appointment with ${item.patient_name}`,
+            title: `${t("dashboard_overview.appointments_with")} ${item.patient_name}`,
           };
           return <HomeFeedTabCard key={item.id} item={data} />;
         })

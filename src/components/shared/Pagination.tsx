@@ -2,6 +2,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import PaginationPageFilter from "./PaginationPageFilter";
+import { useTranslation } from "react-i18next";
 interface IProps {
   totalPages?: number;
   pageLimit?: number;
@@ -25,16 +26,17 @@ const Pagination: React.FC<IProps> = ({
     onPageChange?.(page);
     setCurrentPage(page);
   };
+  const {t} = useTranslation();
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-2">
-        <label className="mb-0">Rows per page:</label>
+        <label className="mb-0">{t("calls.row_per_page")}</label>
         <PaginationPageFilter onChange={onPageLimitChange} />
       </div>
 
       <div className="flex items-center gap-3">
         <label className="mb-0">
-          Page {currentPage} of {totalPage}:
+          {t("calls.page")} {currentPage} {t("calls.of")} {totalPage}:
         </label>
         {/* prev button */}
         <button
@@ -42,7 +44,7 @@ const Pagination: React.FC<IProps> = ({
           onClick={() => handlePageChange(currentPage - 1)}
           className="flex items-center justify-center gap-2 rounded-[8px] bg-brand-blue-2 px-[14px] py-[6px] font-[500] text-white hover:bg-brand-blue-2/80 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-brand-blue-2"
         >
-          <ChevronLeft className="h-4 w-4" /> Prev
+          <ChevronLeft className="h-4 w-4" /> {t("calls.prev")}
         </button>
 
         {/* next button */}
@@ -51,7 +53,7 @@ const Pagination: React.FC<IProps> = ({
           onClick={() => handlePageChange(currentPage + 1)}
           className="flex items-center justify-center gap-2 rounded-[8px] bg-brand-blue-2 px-[14px] py-[6px] font-[500] text-white hover:bg-brand-blue-2/80 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-brand-blue-2"
         >
-          Next <ChevronRight className="h-4 w-4" />
+          {t("calls.next")} <ChevronRight className="h-4 w-4" />
         </button>
       </div>
     </div>

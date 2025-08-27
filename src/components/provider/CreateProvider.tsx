@@ -6,6 +6,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import clsx from "clsx";
 import { useFormik } from "formik";
 import { Fragment, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import * as Yup from "yup";
 
@@ -75,6 +76,8 @@ const CreateProvider: React.FC<IProps> = ({
     },
   });
 
+  const {t} = useTranslation();
+
   return (
     <>
       {/* Trigger */}
@@ -83,7 +86,7 @@ const CreateProvider: React.FC<IProps> = ({
         onClick={() => setOpen(true)}
         className="rounded border border-dark px-3 py-2 text-sm font-medium hover:bg-white/5"
       >
-        {isEditing ? "Edit Provider" : "Create Provider"}
+        {isEditing ? t("Provider.edit_provider") : t("Provider.create_provider")}
       </button>
 
       {/* Dialog */}

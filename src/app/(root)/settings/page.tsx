@@ -5,9 +5,11 @@ import { LanguageFilter, SectionSubTitle, TimeBlockSteering } from "@/components
 import { useAuth } from "@/hooks/useAuth";
 import { Globe, Pause } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 const SettingsPage = () => {
+  const {t} = useTranslation(); 
   const { user } = useAuth();
 
   const { isEmergencyPause, reason } = user?.user_metadata || {};
@@ -44,7 +46,7 @@ const SettingsPage = () => {
         <div className="flex flex-col gap-6 rounded-xl border border-warning/70 bg-warning-dark/50 p-6">
           <SectionSubTitle
             icon={Pause}
-            title="Emergency Pause"
+            title={t("settings.emergency_pause")}
             titleClassName="text-warning/90"
             description={`— ${reasonForPause || "Emergency pause is active"}`}
             descriptionClassName="text-warning/90 ml-4"
@@ -60,8 +62,8 @@ const SettingsPage = () => {
         <div className="flex items-center justify-between">
           <SectionSubTitle
             icon={Pause}
-            title="Emergency Pause"
-            description="Temporarily pause all appointment scheduling"
+            title={t("settings.emergency_pause")}
+            description={t("settings.temporarily_pause")}
           />
 
           <button
@@ -101,7 +103,7 @@ const SettingsPage = () => {
           className="w-fit rounded-[6px] border-[1px] border-dark px-[10px] py-[4px] hover:bg-brand-blue-2 hover:text-white"
           onClick={() => handleUpdate({ isEmergencyPause: isPause, reason: reasonForPause })}
         >
-          Save Changes
+          {t("settings.save_changes")}
         </button>
       </div>
 
@@ -109,12 +111,12 @@ const SettingsPage = () => {
       <div className="flex flex-col gap-6 rounded-xl border border-darker bg-darkest p-6">
         <SectionSubTitle
           icon={Globe}
-          title="Language Preference"
-          description="All interface text supports EN/VI via JSON resources."
+          title={t("settings.language_preference")}
+          description= {t("settings.all_interface_text_supports")}
         />
 
         <div className="flex items-center gap-4">
-          <label className="mb-0 text-sm">Interface Language</label>
+          <label className="mb-0 text-sm">{t("settings.interface_language")}</label>
           <LanguageFilter variant="settings" />
         </div>
       </div>

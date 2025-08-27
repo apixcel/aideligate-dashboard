@@ -1,18 +1,22 @@
+"use client";
 import { SectionSubTitle, SectionTitle } from "@/components";
 import Reviews from "@/components/review/Reviews";
+import { useTranslation } from "react-i18next";
 
-const page = () => {
+
+const Page = () => {
+  const { t } = useTranslation();
   return (
     <div>
       <SectionTitle
-        title="Reviews"
-        description="Manage customer reviews and feedback from all platforms"
+        title={t("reviews.title")}
+        description={t("reviews.description")}
       />
 
       <div className="mt-[20px] rounded-[10px] border-[1px] border-dark p-5">
         <SectionSubTitle
-          title="Customer Reviews"
-          description="View and respond to reviews from Google, Facebook, and TripAdvisor"
+          title={t("reviews.customer_reviews")}
+          description={t("reviews.view_and_respond")}
         />
         <Reviews />
       </div>
@@ -20,4 +24,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

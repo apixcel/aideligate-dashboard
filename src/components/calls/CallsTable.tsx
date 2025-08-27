@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import Pagination from "../shared/Pagination";
 import SortByFilter from "./SortByFilter";
 import StatusFilter from "./StatusFilter";
+import { useTranslation } from "react-i18next";
 
 const callsTableHeaders = [
   {
@@ -35,6 +36,7 @@ const callsTableHeaders = [
 ];
 
 const CallsTable = () => {
+  const {t} = useTranslation();
   const [calls, setCalls] = useState<ICall[]>([]);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -70,8 +72,8 @@ const CallsTable = () => {
     <div className="flex flex-col gap-6 rounded-xl border border-darker bg-darkest p-6 transition-all duration-300">
       <div>
         <SectionSubTitle
-          title="Call Management"
-          description="View, filter, and manage all incoming and outgoing calls"
+          title={t("calls.call_Management")}
+          description={t("calls.view_Filter_manage")}
         />
       </div>
 
@@ -79,7 +81,7 @@ const CallsTable = () => {
         <div className="mb-6 flex flex-col gap-4 sm:flex-row">
           {/* search */}
           <div className="flex-1">
-            <label htmlFor="search">Search</label>
+            <label htmlFor="search">{t("calls.search")}</label>
             <div className="relative text-lighter">
               <Search className="text-muted-foreground absolute top-2.5 left-3 h-4 w-4" />
               <input

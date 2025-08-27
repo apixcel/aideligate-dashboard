@@ -3,7 +3,10 @@ import { getStatistics } from "@/actions/statistics.action";
 import { CalendarDays, ChevronRight, PhoneCall, Star } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 const HomeStatisticsCards = () => {
+  const { t } = useTranslation();
+  
   const [data, setData] = useState({ appointmentsThisWeek: 0, callsToday: 0, reviewThiWeek: 0 });
 
   useEffect(() => {
@@ -23,7 +26,7 @@ const HomeStatisticsCards = () => {
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       <div className="flex flex-col gap-6 rounded-xl border border-darker bg-darkest p-6 transition-all duration-300 hover:border-dark hover:shadow-md">
         <div className="flex items-center justify-between">
-          <h5 className="text-sm font-medium text-lightest xl:text-base">Calls Today</h5>
+          <h5 className="text-sm font-medium text-lightest xl:text-base">{t("dashboard_overview.calls_today")}</h5>
           <div className="flex h-[36px] w-[36px] items-center justify-center rounded-[6px] border-2 border-[#2d2d2d] bg-[linear-gradient(90deg,#232526,#414345)]">
             <PhoneCall className="h-4 w-4" />
           </div>
@@ -34,7 +37,8 @@ const HomeStatisticsCards = () => {
             href="/calls"
             className="group inline-flex items-center gap-[2px] text-xs hover:underline"
           >
-            View calls{" "}
+            {t("dashboard_overview.view_calls")}
+
             <ChevronRight className="mt-[1px] h-3.5 w-3.5 transition-all duration-300 group-hover:translate-x-1" />
           </Link>
         </div>
@@ -42,7 +46,7 @@ const HomeStatisticsCards = () => {
       {/* card 2 */}
       <div className="flex flex-col gap-6 rounded-xl border border-darker bg-darkest p-6 transition-all duration-300 hover:border-dark hover:shadow-md">
         <div className="flex items-center justify-between">
-          <h5 className="text-sm font-medium text-lightest xl:text-base">Appointments This Week</h5>
+          <h5 className="text-sm font-medium text-lightest xl:text-base">{t("dashboard_overview.appointments_this_week")}</h5>
           <div className="flex h-[36px] w-[36px] items-center justify-center rounded-[6px] border-2 border-[#2d2d2d] bg-[linear-gradient(90deg,#232526,#414345)]">
             <CalendarDays className="h-4 w-4" />
           </div>
@@ -53,7 +57,7 @@ const HomeStatisticsCards = () => {
             href="/appointments"
             className="group inline-flex items-center gap-[2px] text-xs hover:underline"
           >
-            Open calendar{" "}
+            {t("dashboard_overview.open_calendar")}
             <ChevronRight className="mt-[1px] h-3.5 w-3.5 transition-all duration-300 group-hover:translate-x-1" />
           </Link>
         </div>
@@ -61,7 +65,7 @@ const HomeStatisticsCards = () => {
       {/* card 3 */}
       <div className="flex flex-col gap-6 rounded-xl border border-darker bg-darkest p-6 transition-all duration-300 hover:border-dark hover:shadow-md">
         <div className="flex items-center justify-between">
-          <h5 className="text-sm font-medium text-lightest xl:text-base">New Reviews This Week</h5>
+          <h5 className="text-sm font-medium text-lightest xl:text-base">{t("dashboard_overview.new_reviews")}</h5>
           <div className="flex h-[36px] w-[36px] items-center justify-center rounded-[6px] border-2 border-[#2d2d2d] bg-[linear-gradient(90deg,#232526,#414345)]">
             <Star className="h-4 w-4" />
           </div>
@@ -72,7 +76,7 @@ const HomeStatisticsCards = () => {
             href="/reviews"
             className="group inline-flex items-center gap-[2px] text-xs hover:underline"
           >
-            Open reviews{" "}
+            {t("dashboard_overview.open_reviews")}
             <ChevronRight className="mt-[1px] h-3.5 w-3.5 transition-all duration-300 group-hover:translate-x-1" />
           </Link>
         </div>

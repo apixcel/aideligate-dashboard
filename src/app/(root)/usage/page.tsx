@@ -1,11 +1,14 @@
+"use client";
 import { CurrentPlan, SectionSubTitle, SectionTitle, UsageStatistics } from "@/components";
+import { useTranslation } from "react-i18next";
 
 const UsagePage = () => {
+  const { t } = useTranslation();
   return (
     <>
       <SectionTitle
-        title="Plan & Usage"
-        description="Monitor your plan usage and billing information"
+        title={t("usage_plan.title")}
+        description= {t("usage_plan.description")}
       />
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -17,28 +20,27 @@ const UsagePage = () => {
         <div>
           {/* section sub title */}
           <SectionSubTitle
-            title="Usage Insights"
-            description="Recommendations to optimize your plan usage"
+            title={t("usage_plan.usage_insights")}
+            description= {t("usage_plan.recommendation_to_optimize")}
           />
         </div>
 
         <div className="grid gap-4 md:grid-cols-3">
           <div className="rounded-lg border border-darker bg-darkest p-4">
-            <h4 className="mb-2 font-medium">Call Efficiency</h4>
+            <h4 className="mb-2 font-medium">{t("usage_plan.call_efficiency")}</h4>
             <p className="text-sm text-light">
-              Your average call duration is 8:45, which is within the optimal range for customer
-              satisfaction.
+            {t("usage_plan.your_avg_call_duration")}
             </p>
           </div>
           <div className="rounded-lg border border-darker bg-darkest p-4">
-            <h4 className="mb-2 font-medium">Peak Usage</h4>
+            <h4 className="mb-2 font-medium">{t("usage_plan.peak_usage")}</h4>
             <p className="text-sm text-light">
-              Mondays see the highest call volume. Consider scheduling more staff during peak times.
+              {t("usage_plan.mondays_see_the_highest_call_volume")}
             </p>
           </div>
           <div className="rounded-lg border border-darker bg-darkest p-4">
-            <h4 className="mb-2 font-medium">Plan Optimization</h4>
-            <p className="text-sm text-light">Your usage is on track for this billing cycle.</p>
+            <h4 className="mb-2 font-medium">{t("usage_plan.plan_optimization")}</h4>
+            <p className="text-sm text-light">{t("usage_plan.your_usage_is_on_track")}</p>
           </div>
         </div>
       </div>

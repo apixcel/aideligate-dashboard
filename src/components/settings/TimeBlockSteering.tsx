@@ -8,8 +8,10 @@ import { Clock } from "lucide-react";
 import { useEffect, useState } from "react";
 import AddTimeBlockWindow from "./AddTimeBlockWindow";
 import DeleteTimeBlock from "./DeleteTimeBlock";
+import { useTranslation } from "react-i18next";
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 const TimeBlockSteering = () => {
+  const { t } = useTranslation();
   const [isChecked, setIsChecked] = useState(true);
   const [timeWindows, setTimeWindows] = useState<ITimeBlock[]>([]);
 
@@ -39,14 +41,14 @@ const TimeBlockSteering = () => {
       <div className="flex items-center justify-between">
         <SectionSubTitle
           icon={Clock}
-          title="Time Block Steering"
-          description="Steer bookings toward preferred windows."
+           title={t("settings.time_Block_Steering")}
+           description={t("settings.steer_bookings")}
         />
       </div>
 
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <label className="mb-0">Preferred Time Windows</label>
+          <label className="mb-0">{t("settings.preferred_Time_windows")}</label>
           <AddTimeBlockWindow onAdd={() => setRefetch(refetch + 1)} />
         </div>
 
@@ -59,15 +61,14 @@ const TimeBlockSteering = () => {
                 <span className="flex w-36 items-center justify-between gap-2 rounded-[8px] border border-dark px-[16px] py-[7px] text-sm whitespace-nowrap text-light outline-0">
                   {days[block.day_of_week - 1]}
                 </span>
-                <span className="text-sm text-light">from</span>
+                <span className="text-sm text-light">{t("settings.from")}</span>
                 <span className="flex w-36 items-center justify-between gap-2 rounded-[8px] border border-dark px-[16px] py-[7px] text-sm whitespace-nowrap text-light outline-0">
                   {formatTimeLabel(block.start_time)}
                 </span>
-                <span className="text-sm text-light">to</span>
+                <span className="text-sm text-light">{t("settings.to")}</span>
                 <span className="flex w-36 items-center justify-between gap-2 rounded-[8px] border border-dark px-[16px] py-[7px] text-sm whitespace-nowrap text-light outline-0">
                   {formatTimeLabel(block.end_time)}
                 </span>
-                <span className="text-sm text-light">to</span>
                 <DeleteTimeBlock onSuccess={() => setRefetch(refetch + 1)} block={block} />
               </div>
             </div>

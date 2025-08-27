@@ -3,6 +3,7 @@
 import { cn } from "@/utils";
 import { Check, ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const status = [
   {
@@ -54,11 +55,12 @@ const StatusFilter: React.FC<IProps> = ({ onChange }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
+  const {t} = useTranslation();
 
   return (
     <div className="relative" ref={dropdownRef}>
       <div>
-        <label>Status</label>
+        <label>{t("calls.status")}</label>
         <button
           className="flex w-36 items-center justify-between gap-2 rounded-[8px] border border-dark px-[16px] py-[7px] text-sm whitespace-nowrap text-light outline-0 placeholder:text-lighter focus:border-neutral"
           onClick={() => setIsOpen(!isOpen)}

@@ -119,7 +119,7 @@ const AddTimeBlockWindow = ({
               >
                 <Dialog.Panel className="w-full max-w-md rounded-xl bg-darker p-5 shadow-xl ring-1 ring-black/10">
                   <div className="flex items-start justify-between">
-                    <Dialog.Title className="text-lg font-semibold">Add Time Window</Dialog.Title>
+                    <Dialog.Title className="text-lg font-semibold">Add  Window</Dialog.Title>
                     <button
                       type="button"
                       onClick={close}

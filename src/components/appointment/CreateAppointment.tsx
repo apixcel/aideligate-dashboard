@@ -7,6 +7,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import * as Yup from "yup";
 import DoctorSelector from "./DoctorSelector";
+import { useTranslation } from "react-i18next";
 const initialValues = {
   patient_name: "",
   doctor_id: "",
@@ -96,6 +97,9 @@ const CreateAppointment: React.FC<IProps> = ({
   const setState = setIsopen ?? setOpen;
   const stateValue = isOpen ?? open;
 
+
+  const {t} = useTranslation();
+
   return (
     <>
       {renderTrigger ? (
@@ -120,7 +124,7 @@ const CreateAppointment: React.FC<IProps> = ({
                   <DialogTitle className="text-lg font-semibold">
                     {defaultValues ? "Update Appointment" : "Create New Appointment"}
                   </DialogTitle>
-                  <p className="mt-1 text-sm">Fill in the appointment details below</p>
+                  <p className="mt-1 text-sm">{t("appointments.fill_in_the_appointment")}</p>
                 </div>
                 <button
                   onClick={() => setState(false)}
@@ -152,12 +156,12 @@ const CreateAppointment: React.FC<IProps> = ({
                     {/* Patient Name */}
                     <div>
                       <label htmlFor="patient_name" className="block text-sm font-medium">
-                        Patient Name
+                        {t("appointments.patient_name")}
                       </label>
                       <Field
                         id="patient_name"
                         name="patient_name"
-                        placeholder="Enter patient name"
+                        placeholder={t("appointments.enter_patient_name")}
                         className="mt-1 w-full"
                       />
                       <ErrorMessage
@@ -170,7 +174,7 @@ const CreateAppointment: React.FC<IProps> = ({
                     {/* Provider */}
                     <div>
                       <label htmlFor="provider" className="block text-sm font-medium">
-                        Provider
+                        {t("appointments.provider")}
                       </label>
                       <DoctorSelector
                         defaultValue={defaultValues?.doctor_id}
@@ -187,7 +191,7 @@ const CreateAppointment: React.FC<IProps> = ({
                     {/* Service Type */}
                     <div>
                       <label htmlFor="service_type" className="block text-sm font-medium">
-                        Service Type
+                        {t("appointments.service_type")}
                       </label>
                       <Field
                         as="select"
@@ -196,11 +200,11 @@ const CreateAppointment: React.FC<IProps> = ({
                         className="mt-1 w-full"
                       >
                         <option value="" hidden>
-                          Select service
+                          {t("appointments.select_service")}
                         </option>
-                        <option value="Consultation">Consultation</option>
-                        <option value="Follow-up">Follow-up</option>
-                        <option value="Physical Exam">Physical Exam</option>
+                        <option value="Consultation">{t("appointments.consultation")}</option>
+                        <option value="Follow-up">{t("appointments.follow_up")}</option>
+                        <option value="Physical Exam">{t("appointments.physical_exam")}</option>
                       </Field>
                       <ErrorMessage
                         name="service_type"
@@ -213,7 +217,7 @@ const CreateAppointment: React.FC<IProps> = ({
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div>
                         <label htmlFor="date" className="block text-sm font-medium">
-                          Date
+                          {t("appointments.date")}
                         </label>
                         <Field id="date" name="date" type="date" className="mt-1 w-full" />
                         <ErrorMessage
@@ -224,7 +228,7 @@ const CreateAppointment: React.FC<IProps> = ({
                       </div>
                       <div>
                         <label htmlFor="time" className="block text-sm font-medium">
-                          Time
+                          {t("appointments.time")}
                         </label>
                         <Field id="time" name="time" type="time" className="mt-1 w-full" />
                         <ErrorMessage
@@ -238,7 +242,7 @@ const CreateAppointment: React.FC<IProps> = ({
                     {/* Notes */}
                     <div>
                       <label htmlFor="notes" className="block text-sm font-medium">
-                        Notes
+                        {t("appointments.notes")}
                       </label>
                       <Field
                         as="textarea"
@@ -262,14 +266,14 @@ const CreateAppointment: React.FC<IProps> = ({
                         onClick={() => setState(false)}
                         className="rounded-lg border border-gray-300 bg-white px-4 py-2 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
                       >
-                        Cancel
+                        {t("appointments.cancel")}
                       </button>
                       <button
                         type="submit"
                         disabled={isSubmitting}
                         className="rounded-lg bg-brand-blue-2 px-4 py-2 font-medium text-white shadow hover:to-brand-blue-1 disabled:opacity-60"
                       >
-                        {isSubmitting ? "Saving..." : "Save Appointment"}
+                        {isSubmitting ? "Saving..." : t("appointments.save_appointment")}
                       </button>
                     </div>
                   </Form>

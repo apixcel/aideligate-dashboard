@@ -7,6 +7,7 @@ import { useState } from "react";
 import AppointmentsTabs from "./AppointmentsTabs";
 import CallTabs from "./CallTabs";
 import ReviewsTabs from "./ReviewsTabs";
+import { useTranslation } from "react-i18next";
 
 const tabs = [
   // {
@@ -31,13 +32,15 @@ const tabs = [
 const HomeFeedTabs = () => {
   const [activeTab, setActiveTab] = useState(tabs[0].value);
 
+  const {t} = useTranslation();
+
   return (
     <div className="flex flex-col gap-6 rounded-xl border border-darker bg-darkest p-6 transition-all duration-300">
       <div className="flex items-center justify-between">
         {/* section sub title */}
         <SectionSubTitle
-          title="Live Activity Feed"
-          description="Recent activity across your business"
+          title={t("dashboard_overview.live_activity")}
+          description={t("dashboard_overview.recent_activity")}
         />
 
         <div className="flex items-center gap-4">
