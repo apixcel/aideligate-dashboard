@@ -1,5 +1,6 @@
 "use client";
 import { createAppointmentAction, updateAppointmentAction } from "@/actions/appointment.action";
+import { TAppointmentStatus } from "@/interface/appointment.interface";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Plus } from "lucide-react";
@@ -7,6 +8,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import * as Yup from "yup";
+import DropDownSelector from "../shared/DropDownSelector";
 import DoctorSelector from "./DoctorSelector";
 const initialValues = {
   patient_name: "",
@@ -15,6 +17,7 @@ const initialValues = {
   date: "",
   time: "",
   notes: "",
+  status: "scheduled",
 };
 
 const AppointmentSchema = Yup.object({
@@ -24,10 +27,11 @@ const AppointmentSchema = Yup.object({
   date: Yup.string().required("Choose a date"),
   time: Yup.string().required("Choose a time"),
   notes: Yup.string().max(500, "Notes must be at most 500 characters"),
+  status: Yup.string().optional(),
 });
 
 interface IProps {
-  defaultValues?: typeof initialValues & { id: string };
+  defaultValues?: typeof initialValues & { id: string; status?: TAppointmentStatus };
   isOpen?: boolean;
   setIsopen?: React.Dispatch<React.SetStateAction<boolean>>;
   renderTrigger?: boolean;
@@ -42,6 +46,7 @@ const CreateAppointment: React.FC<IProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
 
+  const isUpdate = !!defaultValues?.id;
   // In a real app, replace with an API call
   const handleSubmit = async (
     values: typeof initialValues,
@@ -58,7 +63,7 @@ const CreateAppointment: React.FC<IProps> = ({
 
       // Check if datetime is in the future
       const now = new Date();
-      if (dateTime <= now) {
+      if (dateTime <= now && !isUpdate) {
         toast.error("Appointment must be scheduled in the future");
         setSubmitting(false);
         return;
@@ -71,6 +76,7 @@ const CreateAppointment: React.FC<IProps> = ({
         notes: values.notes,
         date_time: dateTime.toISOString(), // timestamptz
         id: defaultValues?.id,
+        status: values.status as TAppointmentStatus,
       };
 
       // Simulate network call
@@ -171,20 +177,49 @@ const CreateAppointment: React.FC<IProps> = ({
                     </div>
 
                     {/* Provider */}
-                    <div>
-                      <label htmlFor="provider" className="block text-sm font-medium">
-                        {t("appointments.provider")}
-                      </label>
-                      <DoctorSelector
-                        defaultValue={defaultValues?.doctor_id}
-                        onBlur={() => setFieldTouched("doctor_id", true)}
-                        onChange={(e) => setFieldValue("doctor_id", e)}
-                      />
-                      <ErrorMessage
-                        name="doctor_id"
-                        component="p"
-                        className="mt-1 text-sm text-red-600"
-                      />
+                    <div className="flex w-full items-start justify-center gap-[10px]">
+                      <div className="w-full">
+                        <label htmlFor="provider" className="block text-sm font-medium">
+                          {t("appointments.provider")}
+                        </label>
+                        <DoctorSelector
+                          defaultValue={defaultValues?.doctor_id}
+                          onBlur={() => setFieldTouched("doctor_id", true)}
+                          onChange={(e) => setFieldValue("doctor_id", e)}
+                        />
+                        <ErrorMessage
+                          name="doctor_id"
+                          component="p"
+                          className="mt-1 text-sm text-red-600"
+                        />
+                      </div>{" "}
+                      {defaultValues ? (
+                        <div className="w-full">
+                          <label htmlFor="status" className="block text-sm font-medium">
+                            {t("appointments.status")}
+                          </label>
+                          <DropDownSelector
+                            defaultValue={{
+                              value: defaultValues?.status?.toLocaleLowerCase() || "",
+                              label: defaultValues?.status || "",
+                            }}
+                            onChange={(e) => setFieldValue("status", e.value)}
+                            className="w-full"
+                            data={[
+                              { value: "pending", label: "Pending" },
+                              { value: "completed", label: "Completed" },
+                              { value: "cancelled", label: "Cancelled" },
+                            ]}
+                          />
+                          <ErrorMessage
+                            name="status"
+                            component="p"
+                            className="mt-1 text-sm text-red-600"
+                          />
+                        </div>
+                      ) : (
+                        ""
+                      )}
                     </div>
 
                     {/* Service Type */}
