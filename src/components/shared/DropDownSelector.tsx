@@ -9,13 +9,14 @@ interface IProps {
   onChange?: (value: { value: string | number; label: string | number }) => void;
   data: { value: string | number; label: string | number }[];
   className?: string;
+  defaultValue?: { value: string | number; label: string | number };
 }
 
-const DropDownSelector: React.FC<IProps> = ({ onChange, data, className }) => {
+const DropDownSelector: React.FC<IProps> = ({ onChange, data, className, defaultValue }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   type SortByType = (typeof data)[number];
-  const [selectedSortBy, setSelectedSortBy] = useState<SortByType>(data[0]);
+  const [selectedSortBy, setSelectedSortBy] = useState<SortByType>(defaultValue || data[0]);
 
   const handleSortByClick = (selected: SortByType) => {
     setSelectedSortBy(selected);
@@ -41,9 +42,13 @@ const DropDownSelector: React.FC<IProps> = ({ onChange, data, className }) => {
   }, [isOpen]);
 
   return (
-    <div className={twMerge("relative", className)} ref={dropdownRef}>
+    <div className={"relative"} ref={dropdownRef}>
       <button
-        className="flex w-36 items-center justify-between gap-2 rounded-[8px] border border-dark px-[16px] py-[7px] text-sm whitespace-nowrap text-light outline-0 placeholder:text-lighter focus:border-neutral"
+        type="button"
+        className={twMerge(
+          "flex w-36 items-center justify-between gap-2 rounded-[8px] border border-dark px-[16px] py-[7px] text-sm whitespace-nowrap text-light outline-0 placeholder:text-lighter focus:border-neutral",
+          className
+        )}
         onClick={() => setIsOpen(!isOpen)}
       >
         {selectedSortBy.label} <ChevronDown className="h-4 w-4" />
@@ -55,6 +60,7 @@ const DropDownSelector: React.FC<IProps> = ({ onChange, data, className }) => {
           <div className="flex flex-col justify-start gap-2 text-left">
             {data.map((sortBy) => (
               <button
+                type="button"
                 key={sortBy.value}
                 className={cn(
                   "flex w-full items-center justify-between gap-1 rounded-[8px] px-3 py-1 text-left text-sm text-light hover:bg-dark",
