@@ -93,6 +93,9 @@ const CreateAppointment: React.FC<IProps> = ({
     }
   };
 
+  const setState = setIsopen ?? setOpen;
+  const stateValue = isOpen ?? open;
+
   return (
     <>
       {renderTrigger ? (
@@ -106,7 +109,7 @@ const CreateAppointment: React.FC<IProps> = ({
         ""
       )}
 
-      <Dialog open={isOpen || open} onClose={setIsopen || setOpen} className="relative z-50">
+      <Dialog open={stateValue} onClose={setState} className="relative z-50">
         <div className="fixed inset-0 bg-black/40" aria-hidden="true" />
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -120,7 +123,7 @@ const CreateAppointment: React.FC<IProps> = ({
                   <p className="mt-1 text-sm">Fill in the appointment details below</p>
                 </div>
                 <button
-                  onClick={() => setOpen(false)}
+                  onClick={() => setState(false)}
                   aria-label="Close"
                   className="-m-2 rounded-full p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
                 >
@@ -256,7 +259,7 @@ const CreateAppointment: React.FC<IProps> = ({
                     <div className="mt-2 flex items-center justify-end gap-3">
                       <button
                         type="button"
-                        onClick={() => setOpen(false)}
+                        onClick={() => setState(false)}
                         className="rounded-lg border border-gray-300 bg-white px-4 py-2 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
                       >
                         Cancel
