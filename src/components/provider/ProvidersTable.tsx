@@ -71,7 +71,7 @@ const ProvidersTable = () => {
             ))}
           </tr>
         </thead>
-
+        {/* table body */}
         <tbody className="divide-y divide-dark last:border-0">
           {isLoading ? (
             <TableRowSkeleton col={providersTableHeaders.length} /> // ✅ skeleton while loading
