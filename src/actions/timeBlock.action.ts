@@ -43,7 +43,9 @@ export const createTimeBlocks = async (
     throw new Error(error.message);
   }
 
-  return data;
+  return {
+    data: data as ITimeBlock[],
+  };
 };
 export interface GetTimeBlocksOptions {
   day_of_week?: number; // filter by 1..7

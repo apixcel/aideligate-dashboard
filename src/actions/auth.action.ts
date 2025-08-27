@@ -117,6 +117,18 @@ export const verifyEmail = async (code: string) => {
   };
 };
 
+export const updateAccount = async (payload: Record<string, unknown>) => {
+  const client = await createClient();
+  const res = await client.auth.updateUser(payload);
+  if (res.error) {
+    return {
+      error: res.error.message,
+      status: res.error.status,
+    };
+  }
+  return res;
+};
+
 export const forgotPasswordAction = async (email: string) => {
   const supabase = await createClient();
   const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";

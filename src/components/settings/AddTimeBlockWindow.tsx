@@ -6,6 +6,7 @@ import { Clock, X } from "lucide-react";
 import { Fragment, useState } from "react";
 import * as Yup from "yup";
 import DropDownSelector from "../shared/DropDownSelector";
+import { toast } from "sonner";
 const days = [
   { label: "Monday", value: 1 },
   { label: "Tuesday", value: 2 },
@@ -67,9 +68,14 @@ const AddTimeBlockWindow = ({
     const end_timetz = toTimetzLiteral(payload.end_time); // e.g. "14:00:00+06:00"
 
     helper.setSubmitting(true);
-    console.log({ ...payload, start_time: start_timetz, end_time: end_timetz }); // {day_of_week: 1, start_time: '13:00', end_time: '14:00'}
 
-    await createTimeBlocks([{ ...payload, start_time: start_timetz, end_time: end_timetz }]); //
+    const res = await createTimeBlocks([
+      { ...payload, start_time: start_timetz, end_time: end_timetz },
+    ]); //
+    if (res?.error) {
+      toast.error(res.error);
+      return;
+    }
     helper.setSubmitting(false);
     onAdd?.(payload);
     close();

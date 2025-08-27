@@ -1,27 +1,44 @@
 "use client";
 
-import { LanguageFilter, SectionSubTitle, SectionTitle, TimeBlockSteering } from "@/components";
-import { Globe, Pause, Save } from "lucide-react";
-import { useState } from "react";
+import { updateAccount } from "@/actions/auth.action";
+import { LanguageFilter, SectionSubTitle, TimeBlockSteering } from "@/components";
+import { useAuth } from "@/hooks/useAuth";
+import { Globe, Pause } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const SettingsPage = () => {
-  const [isPause, setIsPause] = useState(false);
-  const [reasonForPause, setReasonForPause] = useState("");
+  const { user } = useAuth();
+
+  const { isEmergencyPause, reason } = user?.user_metadata || {};
+
+  const [isPause, setIsPause] = useState(Boolean(isEmergencyPause));
+  const [reasonForPause, setReasonForPause] = useState(reason);
+
+  const handleUpdate = async ({
+    isEmergencyPause,
+    reason,
+  }: {
+    isEmergencyPause: boolean;
+    reason: string;
+  }) => {
+    const loader = toast.loading("Updating settings...");
+    const res = await updateAccount({ data: { isEmergencyPause, reason } });
+    toast.dismiss(loader);
+    if (res.error) {
+      toast.error(res.error);
+      return;
+    }
+    toast.success("Settings updated");
+  };
+
+  useEffect(() => {
+    setIsPause(Boolean(isEmergencyPause));
+    setReasonForPause(reason);
+  }, [isEmergencyPause, reason]);
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <SectionTitle
-          title="Settings"
-          description="Configure your business preferences and automation settings"
-        />
-
-        <button className="inline-flex h-9 items-center justify-center gap-2 rounded-md bg-brand-blue-btn px-4 py-2 text-sm font-medium whitespace-nowrap text-lighter shadow-xs transition-all hover:bg-brand-blue-btn/90 has-[>svg]:px-3">
-          <Save className="h-4 w-4" />
-          Save Changes
-        </button>
-      </div>
-
       {/* emergency pause warning */}
       {isPause && (
         <div className="flex flex-col gap-6 rounded-xl border border-warning/70 bg-warning-dark/50 p-6">
@@ -64,7 +81,6 @@ const SettingsPage = () => {
             ></span>
           </button>
         </div>
-
         {isPause && (
           <div>
             <label className="text-sm" htmlFor="reason-for-pause">
@@ -81,6 +97,12 @@ const SettingsPage = () => {
             ></textarea>
           </div>
         )}
+        <button
+          className="w-fit rounded-[6px] border-[1px] border-dark px-[10px] py-[4px] hover:bg-brand-blue-2 hover:text-white"
+          onClick={() => handleUpdate({ isEmergencyPause: isPause, reason: reasonForPause })}
+        >
+          Save Changes
+        </button>
       </div>
 
       {/* language preference */}
