@@ -5,7 +5,10 @@ import { IDoctor } from "@/interface/doctor";
 import { format } from "date-fns";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
+import TableRowSkeleton from "../ui/TableRowSkeleton";
 import CreateProvider from "./CreateProvider";
+import DeleteProvider from "./DeleteProvider";
+import EditProvderInfo from "./EditProvderInfo";
 const providersTableHeaders = [
   {
     label: "Full Name",
@@ -23,12 +26,15 @@ const providersTableHeaders = [
 const ProvidersTable = () => {
   const [refetch, setRefetch] = useState(false);
   const [doctors, setDoctors] = useState<IDoctor[]>([]);
+  const [isLoading, setIsLoading] = useState(false); // ✅ added
   const [search, setSearch] = useDebounce("");
 
   useEffect(() => {
     const fetchDoctors = async () => {
+      setIsLoading(true); // ✅ start loading
       const res = await getAllDoctors({ search });
-      if (res.data) setDoctors(res.data);
+      setDoctors(res.data || []);
+      setIsLoading(false); // ✅ end loading
     };
 
     fetchDoctors();
@@ -67,20 +73,29 @@ const ProvidersTable = () => {
         </thead>
 
         <tbody className="divide-y divide-dark last:border-0">
-          {doctors.map((row) => (
-            <tr key={row.id} className="cursor-pointer text-light duration-[0.3s] hover:bg-white/5">
-              <td className="cursor-pointer p-2 align-middle font-medium whitespace-nowrap">
-                {row.full_name}
-              </td>
-              <td className="cursor-pointer p-2 align-middle font-medium whitespace-nowrap">
-                {format(new Date(row.created_at), "dd MMM yyyy")}
-              </td>
-
-              <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
-                <button>Options</button>
-              </td>
-            </tr>
-          ))}
+          {isLoading ? (
+            <TableRowSkeleton col={providersTableHeaders.length} /> // ✅ skeleton while loading
+          ) : (
+            doctors.map((row) => (
+              <tr
+                key={row.id}
+                className="cursor-pointer text-light duration-[0.3s] hover:bg-white/5"
+              >
+                <td className="cursor-pointer p-2 align-middle font-medium whitespace-nowrap">
+                  {row.full_name}
+                </td>
+                <td className="cursor-pointer p-2 align-middle font-medium whitespace-nowrap">
+                  {format(new Date(row.created_at), "dd MMM yyyy")}
+                </td>
+                <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
+                  <div className="flex items-center gap-1">
+                    <EditProvderInfo onSuccess={() => setRefetch(!refetch)} provider={row} />
+                    <DeleteProvider onSuccess={() => setRefetch(!refetch)} doctor={row} />
+                  </div>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

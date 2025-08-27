@@ -4,10 +4,10 @@ import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Plus } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import * as Yup from "yup";
 import DoctorSelector from "./DoctorSelector";
-import { useTranslation } from "react-i18next";
 const initialValues = {
   patient_name: "",
   doctor_id: "",
@@ -97,8 +97,7 @@ const CreateAppointment: React.FC<IProps> = ({
   const setState = setIsopen ?? setOpen;
   const stateValue = isOpen ?? open;
 
-
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <>

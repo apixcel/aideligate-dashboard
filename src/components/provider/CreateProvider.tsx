@@ -20,6 +20,7 @@ interface IProps {
   onSuccess?: () => void;
   title?: string; // optional dialog title
   submitLabel?: string; // optional button label
+  renderTrigger?: boolean;
 }
 
 const schema = Yup.object({
@@ -35,6 +36,7 @@ const CreateProvider: React.FC<IProps> = ({
   state,
   deafultValues,
   onSuccess,
+  renderTrigger = true,
   title = "Provider",
   submitLabel,
 }) => {
@@ -76,18 +78,22 @@ const CreateProvider: React.FC<IProps> = ({
     },
   });
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <>
       {/* Trigger */}
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="rounded border border-dark px-3 py-2 text-sm font-medium hover:bg-white/5"
-      >
-        {isEditing ? t("Provider.edit_provider") : t("Provider.create_provider")}
-      </button>
+      {renderTrigger ? (
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="rounded border border-dark px-3 py-2 text-sm font-medium hover:bg-white/5"
+        >
+          {isEditing ? t("Provider.edit_provider") : t("Provider.create_provider")}
+        </button>
+      ) : (
+        ""
+      )}
 
       {/* Dialog */}
       <Transition appear show={open} as={Fragment}>

@@ -12,6 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import i18n from "../../../i18n";
 
 const SIDEBAR_OPEN = 256; // 16rem
 const SIDEBAR_CLOSED = 64; // 4rem
@@ -39,7 +40,7 @@ const PageLayout = ({ children }: { children: React.ReactNode }) => {
   if (isLoading) return <Loader className="h-screen" />;
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" key={i18n.language}>
       {/* desktop sidebar */}
       <motion.aside
         aria-label="Primary"

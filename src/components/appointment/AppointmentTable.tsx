@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import MonthNavigator from "../shared/MonthNavigator";
 import Pagination from "../shared/Pagination";
+import TableRowSkeleton from "../ui/TableRowSkeleton";
 import AppointmentActions from "./action/AppointmentActions";
 import DoctorSelector from "./DoctorSelector";
 const appointmenTableHeaders = [
@@ -47,6 +48,7 @@ interface IProps {
   setRefetch: React.Dispatch<React.SetStateAction<number>>;
 }
 const AppointmentTable: React.FC<IProps> = ({ refetch, setRefetch }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [appointments, setAppointments] = useState<IAppointment[]>([]);
   const [query, setQuery] = useState({
     from: "",
@@ -61,6 +63,7 @@ const AppointmentTable: React.FC<IProps> = ({ refetch, setRefetch }) => {
 
   useEffect(() => {
     const fetchAppointments = async () => {
+      setIsLoading(true);
       const res = await getAppointments({
         page: query.page,
         limit: query.pageSize,
@@ -70,6 +73,7 @@ const AppointmentTable: React.FC<IProps> = ({ refetch, setRefetch }) => {
         search: search,
         status: query.status as TAppointmentStatus,
       });
+      setIsLoading(false);
       if (res.data) setAppointments(res.data);
       if (res.meta) setTotalPages(res.meta.totalPages);
     };
@@ -138,38 +142,44 @@ const AppointmentTable: React.FC<IProps> = ({ refetch, setRefetch }) => {
 
             {/* table rows */}
             <tbody className="divide-y divide-dark last:border-0">
-              {appointments.map((row) => (
-                <tr
-                  key={row.id}
-                  className="cursor-pointer text-light duration-[0.3s] hover:bg-white/5"
-                >
-                  <td className="cursor-pointer p-2 align-middle font-medium whitespace-nowrap">
-                    {row.patient_name}
-                  </td>
-                  <td className="cursor-pointer p-2 align-middle font-medium whitespace-nowrap">
-                    {row.doctor?.full_name}
-                  </td>
+              {isLoading ? (
+                <TableRowSkeleton col={appointmenTableHeaders.length} />
+              ) : (
+                appointments.map((row) => (
+                  <tr
+                    key={row.id}
+                    className="cursor-pointer text-light duration-[0.3s] hover:bg-white/5"
+                  >
+                    <td className="cursor-pointer p-2 align-middle font-medium whitespace-nowrap">
+                      {row.patient_name}
+                    </td>
+                    <td className="cursor-pointer p-2 align-middle font-medium whitespace-nowrap">
+                      {row.doctor?.full_name}
+                    </td>
 
-                  <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
-                    <span
-                      className={`rounded-md px-2 py-1 text-sm text-white capitalize ${row.status === "scheduled" ? "bg-brand-blue-2/80" : row.status === "cancelled" ? "bg-red/80" : "bg-success/80"}`}
-                    >
-                      {row.status}
-                    </span>
-                  </td>
+                    <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
+                      <span
+                        className={`rounded-md px-2 py-1 text-sm text-white capitalize ${row.status === "scheduled" ? "bg-brand-blue-2/80" : row.status === "cancelled" ? "bg-red/80" : "bg-success/80"}`}
+                      >
+                        {row.status}
+                      </span>
+                    </td>
 
-                  <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
-                    {row.service_type}
-                  </td>
-                  <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
-                    {format(new Date(row.date_time), "dd MMM yyyy, HH:mm")}
-                  </td>
-                  <td className="cursor-pointer p-2 align-middle whitespace-nowrap">{row.notes}</td>
-                  <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
-                    <AppointmentActions setRefetch={setRefetch} appointment={row} />
-                  </td>
-                </tr>
-              ))}
+                    <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
+                      {row.service_type}
+                    </td>
+                    <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
+                      {format(new Date(row.date_time), "dd MMM yyyy, HH:mm")}
+                    </td>
+                    <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
+                      {row.notes}
+                    </td>
+                    <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
+                      <AppointmentActions setRefetch={setRefetch} appointment={row} />
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

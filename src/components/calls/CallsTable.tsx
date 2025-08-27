@@ -7,10 +7,11 @@ import { ICall, TCallStatus } from "@/interface/call.interface";
 import { format } from "date-fns";
 import { Search, User } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Pagination from "../shared/Pagination";
+import TableRowSkeleton from "../ui/TableRowSkeleton";
 import SortByFilter from "./SortByFilter";
 import StatusFilter from "./StatusFilter";
-import { useTranslation } from "react-i18next";
 
 const callsTableHeaders = [
   {
@@ -36,9 +37,10 @@ const callsTableHeaders = [
 ];
 
 const CallsTable = () => {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [calls, setCalls] = useState<ICall[]>([]);
   const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(false); // ✅ added
 
   const [search, setSearch] = useDebounce("");
 
@@ -50,7 +52,8 @@ const CallsTable = () => {
   });
 
   useEffect(() => {
-    const x = async () => {
+    const fetchCalls = async () => {
+      setIsLoading(true); // ✅ start loading
       const res = await getClientCallsAction({
         page: queryFilter.page,
         pageSize: queryFilter.pageSize,
@@ -59,13 +62,11 @@ const CallsTable = () => {
         sortDir: queryFilter.sortDir as "asc" | "desc",
         search: search,
       });
-
-      console.log(queryFilter.sortDir);
-
       setCalls(res.data || []);
       setTotalPages(res.meta?.totalPages || 1);
+      setIsLoading(false); // ✅ end loading
     };
-    x();
+    fetchCalls();
   }, [queryFilter, search]);
 
   return (
@@ -126,35 +127,42 @@ const CallsTable = () => {
                 </tr>
               </thead>
 
-              {/* table rows */}
               <tbody className="divide-y divide-dark last:border-0">
-                {calls.map((row) => (
-                  <tr key={row.id} className="cursor-pointer text-light">
-                    <td className="cursor-pointer p-2 align-middle font-medium whitespace-nowrap">
-                      {row.caller_number}
-                    </td>
-
-                    <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
-                      <span
-                        className={`rounded-md px-2 py-1 text-sm text-white ${row.status === "voicemail" ? "bg-brand-blue-2/80" : row.status === "missed" ? "bg-red/80" : "bg-success/80"}`}
-                      >
-                        {row.status}
-                      </span>
-                    </td>
-
-                    <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
-                      {format(new Date(row.call_time), "dd MMM yyyy, HH:mm")}
-                    </td>
-                    <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
-                      {row.notes}
-                    </td>
-                    <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
-                      <button className="rounded-md p-1 text-light hover:bg-white-secondary hover:text-black-secondary">
-                        <User className="h-4 w-4" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {isLoading ? (
+                  <TableRowSkeleton col={callsTableHeaders.length} /> // ✅ skeleton while loading
+                ) : (
+                  calls.map((row) => (
+                    <tr key={row.id} className="cursor-pointer text-light">
+                      <td className="cursor-pointer p-2 align-middle font-medium whitespace-nowrap">
+                        {row.caller_number}
+                      </td>
+                      <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
+                        <span
+                          className={`rounded-md px-2 py-1 text-sm text-white ${
+                            row.status === "voicemail"
+                              ? "bg-brand-blue-2/80"
+                              : row.status === "missed"
+                                ? "bg-red/80"
+                                : "bg-success/80"
+                          }`}
+                        >
+                          {row.status}
+                        </span>
+                      </td>
+                      <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
+                        {format(new Date(row.call_time), "dd MMM yyyy, HH:mm")}
+                      </td>
+                      <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
+                        {row.notes}
+                      </td>
+                      <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
+                        <button className="rounded-md p-1 text-light hover:bg-white-secondary hover:text-black-secondary">
+                          <User className="h-4 w-4" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

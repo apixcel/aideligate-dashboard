@@ -3,8 +3,9 @@
 import { cn } from "@/utils";
 import { Check, Globe } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import i18n from "../../../i18n";
 
-const language = [
+const languages = [
   {
     label: "English",
     shortLabel: "EN",
@@ -13,7 +14,7 @@ const language = [
   {
     label: "Vietnamese",
     shortLabel: "VN",
-    value: "vi",
+    value: "vn",
   },
   {
     label: "Russian",
@@ -25,14 +26,17 @@ const language = [
 const LanguageFilter = ({ variant }: { variant: "settings" | "header" }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  type LanguageType = (typeof language)[number];
-  const [selectedLanguage, setSelectedLanguage] = useState<LanguageType>(language[0]);
+  type LanguageType = (typeof languages)[number];
+  const [selectedLanguage, setSelectedLanguage] = useState<LanguageType>(languages[0]);
 
   const headerVariant = variant === "header";
 
   const handleLanguageClick = (selected: LanguageType) => {
+    if (selected.value === i18n.language) return;
     setSelectedLanguage(selected);
     setIsOpen(false);
+    i18n.changeLanguage(selected.value);
+    localStorage.setItem("lang", selected.value);
   };
 
   // outside click handler
@@ -51,6 +55,14 @@ const LanguageFilter = ({ variant }: { variant: "settings" | "header" }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    const lang = localStorage.getItem("lang");
+    const langusage = languages.find((item) => item.value === lang);
+    const currentLang = langusage || languages[0];
+    setSelectedLanguage(currentLang);
+    i18n.changeLanguage(currentLang.value);
+  }, []);
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -83,7 +95,7 @@ const LanguageFilter = ({ variant }: { variant: "settings" | "header" }) => {
           )}
         >
           <div className="flex flex-col justify-start gap-2 text-left">
-            {language.map((language) => (
+            {languages.map((language) => (
               <button
                 key={language.value}
                 className={cn(
