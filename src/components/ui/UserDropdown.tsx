@@ -29,7 +29,7 @@ const UserDropdown = () => {
         <Menu.Items className="ring-opacity-5 absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-700 rounded-md bg-gray-900 shadow-lg ring-1 ring-black focus:outline-none">
           <div className="px-4 py-3">
             <p className="text-sm font-medium text-white">
-              {user?.user_metadata?.display_name || "Guest"}
+              {user?.user_metadata?.display_name || "User name"}
             </p>
             <p className="truncate text-sm text-gray-400">{user?.email || "No email"}</p>
           </div>

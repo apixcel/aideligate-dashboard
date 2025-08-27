@@ -1,4 +1,12 @@
-import { LayoutDashboard, Phone, Calendar, Star, Settings, ChartColumn } from "lucide-react";
+import {
+  Calendar,
+  ChartColumn,
+  LayoutDashboard,
+  Phone,
+  Settings,
+  Star,
+  UserRoundSearch,
+} from "lucide-react";
 
 export const sidebarLinks = [
   {
@@ -10,6 +18,11 @@ export const sidebarLinks = [
     route: "/calls",
     label: "Calls",
     icon: Phone,
+  },
+  {
+    route: "/provider",
+    label: "Providers",
+    icon: UserRoundSearch,
   },
   {
     route: "/appointments",
