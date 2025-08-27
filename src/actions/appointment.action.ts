@@ -3,7 +3,19 @@
 import { IAppointment, TAppointmentStatus } from "@/interface/appointment.interface";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
+function toIsoDowUtc(d: Date) {
+  // 0=Sun..6=Sat  ->  1=Mon..7=Sun
+  const dow = d.getUTCDay();
+  return ((dow + 6) % 7) + 1;
+}
 
+function toTimetzUTCString(d: Date) {
+  // Build a timetz literal at +00:00, e.g. "14:05:00+00:00"
+  const hh = String(d.getUTCHours()).padStart(2, "0");
+  const mm = String(d.getUTCMinutes()).padStart(2, "0");
+  const ss = String(d.getUTCSeconds()).padStart(2, "0");
+  return `${hh}:${mm}:${ss}+00:00`;
+}
 export async function createAppointmentAction(
   payload: Omit<IAppointment, "id" | "client_id"> & { revalidate?: string }
 ) {
@@ -29,71 +41,25 @@ export async function createAppointmentAction(
 
   const dt =
     typeof payload.date_time === "string" ? new Date(payload.date_time) : payload.date_time;
+  const isodow = toIsoDowUtc(dt);
+  const apptTimetzUTC = toTimetzUTCString(dt);
 
-  if (Number.isNaN(dt.getTime())) {
-    return { error: "date_time is invalid", status: 400 } as const;
-  }
-  const parseOffsetMinutes = (timetz: string): number => {
-    const z = timetz.endsWith("Z");
-    if (z) return 0;
-
-    const m = timetz.match(/([+-])(\d{2})(?::?(\d{2}))?$/);
-    if (!m) return 0;
-    const sign = m[1] === "-" ? -1 : 1;
-    const hh = parseInt(m[2], 10);
-    const mm = m[3] ? parseInt(m[3], 10) : 0;
-    return sign * (hh * 60 + mm);
-  };
-
-  // "HH:MM[:SS]" (prefix of timetz) → minutes since midnight
-  const parseHHMMtoMinutes = (timetz: string): number => {
-    const m = timetz.match(/^(\d{2}):(\d{2})(?::\d{2})?/);
-    if (!m) return 0;
-    return parseInt(m[1], 10) * 60 + parseInt(m[2], 10);
-  };
-
-  // Convert a UTC instant → local (for numeric offset) minutes + ISO weekday 1..7
-  const localMinutesAndIsoDow = (utcInstant: Date, offsetMin: number) => {
-    const localMs = utcInstant.getTime() + offsetMin * 60_000;
-    const d = new Date(localMs); // use UTC getters to avoid host tz
-    const minsSinceMidnight = d.getUTCHours() * 60 + d.getUTCMinutes();
-    const dow0Sun6 = d.getUTCDay();
-    const isoDow = ((dow0Sun6 + 6) % 7) + 1; // 1=Mon..7=Sun
-    return { minsSinceMidnight, isoDow };
-  };
-
-  // --- fetch blocks and check conflicts ---
-
-  const { data: blocks, error: blocksError } = await supabase
+  const { count: blockedCount, error: tbErr } = await supabase
     .from("time_block")
-    .select("day_of_week,start_time,end_time")
-    .eq("client_id", client.data.id);
+    .select("id", { count: "exact", head: true })
+    .eq("client_id", client.data.id)
+    .eq("day_of_week", isodow)
+    .lte("start_time", apptTimetzUTC) // start <= appt
+    .gt("end_time", apptTimetzUTC); // appt < end
 
-  if (blocksError) return { error: blocksError.message, status: 400 } as const;
+  if (tbErr) return { error: tbErr.message, status: 400 as const };
 
-  // Check against each block (each timetz carries its own offset)
-  for (const b of blocks ?? []) {
-    const startOffset = parseOffsetMinutes(b.start_time as unknown as string);
-    const endOffset = parseOffsetMinutes(b.end_time as unknown as string);
-
-    // if offsets differ, pick start's (they *should* match per row)
-    const offsetMin = startOffset || endOffset || 0;
-
-    const { minsSinceMidnight, isoDow } = localMinutesAndIsoDow(dt, offsetMin);
-    if (isoDow !== b.day_of_week) continue;
-
-    const startMin = parseHHMMtoMinutes(b.start_time as unknown as string);
-    const endMin = parseHHMMtoMinutes(b.end_time as unknown as string);
-    // overlap if appt time ∈ [start, end)
-    if (minsSinceMidnight >= startMin && minsSinceMidnight < endMin) {
-      return {
-        error: `This time is blocked`,
-        status: 409, // conflict
-      } as const;
-    }
+  if ((blockedCount ?? 0) > 0) {
+    return {
+      error: "Can't book an appointment with this date and time.. The time slot is blocked.",
+      status: 409 as const,
+    };
   }
-
-  // insert (RLS will ensure the user can only insert for their own client_id)
   const { data, error } = await supabase
     .from("appointments") // <- your exact table name
     .insert({
