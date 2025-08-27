@@ -77,7 +77,7 @@ const ProvidersTable = () => {
               </td>
 
               <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
-                <button>fassdfjasl</button>
+                <button>Options</button>
               </td>
             </tr>
           ))}
