@@ -25,6 +25,7 @@ const EditProvderInfo: React.FC<IProps> = ({ provider, onSuccess }) => {
         state={isEditDialogOpen}
         setState={setIsEditDialogOpen}
         onSuccess={onSuccess}
+        title={provider.full_name}
       />
     </>
   );

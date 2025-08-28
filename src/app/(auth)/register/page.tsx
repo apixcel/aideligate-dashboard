@@ -1,27 +1,31 @@
 "use client";
 
 import { signUpAction } from "@/actions/auth.action";
-import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
-import { Eye, EyeOff, MailCheck } from "lucide-react";
+import RenderFormErrorMessage from "@/components/ui/RenderFormErrorMessage";
+import { Field, Form, Formik, FormikHelpers } from "formik";
+import { Eye, EyeOff, LoaderCircle, MailCheck } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import * as Yup from "yup";
 
 // Yup schema
 const RegisterSchema = Yup.object({
-  email: Yup.string().email("Enter a valid email").required("Email is required"),
+  email: Yup.string()
+    .email("register.validation.email_invalid")
+    .required("register.validation.email_required"),
   password: Yup.string()
-    .min(8, "At least 8 characters")
-    .matches(/[a-z]/, "Include a lowercase letter")
-    .matches(/[A-Z]/, "Include an uppercase letter")
-    .matches(/\d/, "Include a number")
-    .matches(/[^A-Za-z0-9]/, "Include a symbol")
-    .required("Password is required"),
-  full_name: Yup.string().required("Please enter your full name"),
+    .min(8, "register.validation.password_min")
+    .matches(/[a-z]/, "register.validation.password_lower")
+    .matches(/[A-Z]/, "register.validation.password_upper")
+    .matches(/\d/, "register.validation.password_digit")
+    .matches(/[^A-Za-z0-9]/, "register.validation.password_special")
+    .required("register.validation.password_required"),
+  full_name: Yup.string().required("register.validation.full_name_required"),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password")], "Passwords must match")
-    .required("Confirm your password"),
+    .oneOf([Yup.ref("password")], "register.validation.confirm_password_must_match")
+    .required("register.validation.confirm_password_required"),
 });
 
 const initialvalue = { email: "", password: "", confirmPassword: "", full_name: "" };
@@ -52,13 +56,12 @@ const Register = () => {
     }
 
     toast.success("Registration successful");
-    setSuccessEmail(values.email); // <- flip UI to success state
+    setSuccessEmail(values.email);
     helper.resetForm();
   };
 
-  // If registration succeeded, show the verification notice instead of the form
+  const { t } = useTranslation();
 
-  // Default: render the registration form
   return (
     <>
       {successEmail ? (
@@ -67,14 +70,9 @@ const Register = () => {
             <MailCheck className="h-10 w-10" aria-hidden />
           </div>
           <div className="max-w-md space-y-2">
-            <h2 className="text-3xl font-bold">Check your email</h2>
-            <p className="text-sm text-light">
-              We’ve sent a verification link to <span className="font-medium">{successEmail}</span>.
-              Please open it to verify your account and complete your registration.
-            </p>
-            <p className="text-xs text-light">
-              Didn’t get the email? Check your spam folder or try again in a minute.
-            </p>
+            <h2 className="text-3xl font-bold">{t("register.confirmation.check_mail")}</h2>
+            <p className="text-sm text-light">{t("register.confirmation.description")}</p>
+            <p className="text-xs text-light">{t("register.confirmation.msg")}</p>
           </div>
 
           {/* Optional actions */}
@@ -83,7 +81,7 @@ const Register = () => {
               href="/login"
               className="rounded-[8px] bg-brand-blue-2 px-[14px] py-[6px] font-[500] text-white hover:bg-brand-blue-2/80"
             >
-              Go to Login
+              {t("register.confirmation.go_to_login")}
             </Link>
             {/* TODO: Hook up a resend endpoint if you have one */}
             {/* <button
@@ -98,10 +96,8 @@ const Register = () => {
         <>
           {/* header */}
           <div className="flex flex-col gap-2 text-center">
-            <h2 className="text-3xl font-bold">Register</h2>
-            <p className="px-4 text-sm text-light">
-              Create an account to access your business management platform
-            </p>
+            <h2 className="text-3xl font-bold">{t("register.title")}</h2>
+            <p className="px-4 text-sm text-light">{t("register.description")}</p>
           </div>
 
           {/* form */}
@@ -113,41 +109,37 @@ const Register = () => {
             {({ isSubmitting }) => (
               <Form className="flex flex-col gap-4">
                 <div>
-                  <label htmlFor="full_name">Full name</label>
+                  <label htmlFor="full_name">{t("register.full_name")}</label>
                   <Field
                     id="full_name"
                     name="full_name"
                     type="full_name"
-                    placeholder="Enter your email"
+                    placeholder={t("register.full_name_placeholder")}
                     className="w-full"
                   />
-                  <ErrorMessage
-                    name="full_name"
-                    component="p"
-                    className="mt-1 text-sm text-red-500"
-                  />
+                  <RenderFormErrorMessage name="full_name" />
                 </div>
                 <div>
-                  <label htmlFor="email">Email</label>
+                  <label htmlFor="email">{t("register.email")}</label>
                   <Field
                     id="email"
                     name="email"
                     type="email"
-                    placeholder="Enter your email"
+                    placeholder={t("register.email_placeholder")}
                     className="w-full"
                   />
-                  <ErrorMessage name="email" component="p" className="mt-1 text-sm text-red-500" />
+                  <RenderFormErrorMessage name="email" />
                 </div>
 
                 {/* password */}
                 <div>
-                  <label htmlFor="password">Password</label>
+                  <label htmlFor="password">{t("register.password")}</label>
                   <div className="relative">
                     <Field
                       id="password"
                       name="password"
                       type={showPassword ? "text" : "password"}
-                      placeholder="Enter your password"
+                      placeholder={t("register.password_placeholder")}
                       className="w-full"
                     />
                     <button
@@ -159,22 +151,18 @@ const Register = () => {
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                   </div>
-                  <ErrorMessage
-                    name="password"
-                    component="p"
-                    className="mt-1 text-sm text-red-500"
-                  />
+                  <RenderFormErrorMessage name="password" />
                 </div>
 
                 {/* confirm password */}
                 <div>
-                  <label htmlFor="confirmPassword">Confirm Password</label>
+                  <label htmlFor="confirmPassword">{t("register.confirm_password")}</label>
                   <div className="relative">
                     <Field
                       id="confirmPassword"
                       name="confirmPassword"
                       type={showConfirmPassword ? "text" : "password"}
-                      placeholder="Confirm your password"
+                      placeholder={t("register.confirm_password_placeholder")}
                       className="w-full"
                     />
                     <button
@@ -192,11 +180,7 @@ const Register = () => {
                       )}
                     </button>
                   </div>
-                  <ErrorMessage
-                    name="confirmPassword"
-                    component="p"
-                    className="mt-1 text-sm text-red-500"
-                  />
+                  <RenderFormErrorMessage name="confirmPassword" />
                 </div>
 
                 {/* submit button */}
@@ -205,7 +189,8 @@ const Register = () => {
                   disabled={isSubmitting}
                   className="flex items-center justify-center gap-2 rounded-[8px] bg-brand-blue-2 px-[14px] py-[6px] font-[500] text-white hover:bg-brand-blue-2/80 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  {isSubmitting ? "Registering..." : "Register"}
+                  {t("register.title")}{" "}
+                  {isSubmitting ? <LoaderCircle className="h-4 w-4 animate-spin" /> : ""}
                 </button>
               </Form>
             )}
@@ -213,9 +198,9 @@ const Register = () => {
 
           <div className="flex flex-col items-center justify-center gap-2">
             <p className="text-sm text-light">
-              Already have an account?{" "}
+              {t("register.already_have_account")}?{" "}
               <Link className="text-sm text-lightest hover:underline" href="/login">
-                Login
+                {t("login.title")}
               </Link>
             </p>
           </div>

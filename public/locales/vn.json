@@ -3,6 +3,7 @@
     "nav": {
       "dashboard": "Bảng điều khiển",
       "calls": "Cuộc gọi",
+      "provider": "người dành dụm",
       "appointments": "Cuộc hẹn",
       "reviews": "Đánh giá",
       "settings": "Cài đặt",
@@ -32,6 +33,7 @@
       "description": "Quản lý và theo dõi tất cả các cuộc gọi kinh doanh. Cuộc gọi mới sẽ hiển thị tự động.",
       "call_Management": "Quản lý cuộc gọi",
       "view_Filter_manage": "Xem, lọc và quản lý tất cả cuộc gọi đến và đi",
+      "search_placeholder": "Tìm kiếm theo người gọi, ghi chú",
       "search": "Tìm kiếm",
       "status": "Trạng thái",
       "all_status": "Tất cả trạng thái",
@@ -51,7 +53,7 @@
       "prev": "Trước",
       "next": "Tiếp"
     },
-    "Provider": {
+    "provider": {
       "title": "Nhà cung cấp",
       "description": "Quản lý nhà cung cấp",
       "all_providers": "Tất cả nhà cung cấp",
@@ -60,7 +62,15 @@
       "edit_provider": "Chỉnh sửa nhà cung cấp",
       "full_name": "Họ và tên",
       "date_joined": "Ngày tham gia",
-      "actions": "Hành động"
+      "actions": "Hành động",
+      "search_placeholder": "Tìm kiếm theo Tên đầy đủ",
+      "save_changes": "Luu thay đổi",
+      "cancel": "Hủy",
+      "validation": {
+        "full_name_required": "Họ và tên là bắt buộc",
+        "full_name_min": "Tên phải có ít nhất 2 ký tự",
+        "full_name_max": "Tên phải có nhiều nhất 100 ký tự"
+      }
     },
     "appointments": {
       "title": "Cuộc hẹn",
@@ -68,6 +78,7 @@
       "all_appointments": "Tất cả cuộc hẹn",
       "view_filter_create": "Xem, lọc/tạo cuộc hẹn",
       "search": "Tìm kiếm",
+      "search_placeholder": "Tìm kiếm theo tên bệnh nhân, ghi chú...",
       "new_appointments": "Cuộc hẹn mới",
       "update_appointment": "Cập nhật cuộc hẹn",
       "create_new_appointment": "Tạo cuộc hẹn mới",
@@ -98,10 +109,20 @@
       "row_per_page": "Hàng mỗi trang",
       "page": "Trang",
       "prev": "Trước",
-      "next": "Tiếp"
+      "next": "Tiếp",
+      "note_placeholder": "Thêm bất kỳ ghi chú nào về cuộc hẹn này",
+      "validation": {
+        "patient_name_required": "Tên bệnh nhân là bắt buộc",
+        "provider_required": "Vui lòng chọn nhà cung cấp",
+        "service_required": "Vui lòng chọn dịch vụ",
+        "date_required": "Vui lòng chọn ngày",
+        "time_required": "Vui lòng chọn giờ",
+        "note_max": "Ghi chú phải có tối đa 500 ký tự"
+      }
     },
     "reviews": {
       "title": "Đánh giá",
+      "placeholder": "đánh giá bắt đầu từ",
       "description": "Quản lý đánh giá và phản hồi của khách hàng từ tất cả nền tảng",
       "customer_reviews": "Đánh giá khách hàng",
       "view_and_respond": "Xem và phản hồi đánh giá từ Google, Facebook và TripAdvisor",
@@ -118,6 +139,7 @@
       "replied": "Đã phản hồi",
       "not_replied": "Chưa phản hồi",
       "reply": "Trả lời",
+      "edit_reply": "chỉnh sửa trả lời",
       "view_original": "Xem bản gốc",
       "your_reply": "Phản hồi của bạn",
       "row_per_page": "Hàng mỗi trang",
@@ -133,17 +155,24 @@
       "to": "Đến",
       "add_window": "Thêm khung",
       "add_time_window": "Thêm khung giờ",
-      "day_to_week": "Ngày trong tuần",
+      "day_of_week": "Ngày trong tuần",
       "start_time": "Giờ bắt đầu",
       "end_time": "Giờ kết thúc",
       "cancel": "Hủy",
       "add": "Thêm",
+      "reasong_placeholder": "Lý do tạm dừng (trình bày cho bệnh nhân)",
       "emergency_pause": "Tạm dừng khẩn cấp",
       "temporarily_pause": "Tạm dừng tất cả cuộc hẹn",
       "save_changes": "Lưu thay đổi",
       "language_preference": "Ngôn ngữ",
       "all_interface_text_supports": "Toàn bộ giao diện hỗ trợ EN/VI qua JSON.",
-      "interface_language": "Ngôn ngữ giao diện"
+      "interface_language": "Ngôn ngữ giao diện",
+      "time_block_validaton": {
+        "start_time_required": "Phải chọn thời gian bắt đầu",
+        "end_time_required": "Phải chọn thời gian kết thúc",
+        "end_time_after_start_time": "Thời gian kết thúc phải sau thời gian bắt đầu",
+        "day_required": "Vui lòng chọn ngày"
+      }
     },
     "usage_plan": {
       "title": "Gói & Sử dụng",
@@ -181,6 +210,89 @@
       "mondays_see_the_highest_call_volume": "Thứ hai có lượng cuộc gọi cao nhất. Nên bố trí thêm nhân viên.",
       "plan_optimization": "Tối ưu gói",
       "your_usage_is_on_track": "Sử dụng của bạn đang trong giới hạn kỳ thanh toán."
+    },
+    "login": {
+      "title": "Đăng nhập",
+      "description": "Đăng nhập để truy cập nền tảng quản lý doanh nghiệp của bạn",
+      "email": "Email",
+      "email_placeholder": "Nhập email của bạn",
+      "password": "Mật khẩu",
+      "password_placeholder": "Nhập mật khẩu của bạn",
+      "validation": {
+        "email_required": "Email là bắt buộc",
+        "email_invalid": "Vui lòng nhập email hợp lệ",
+        "password_required": "Mật khẩu là bắt buộc"
+      },
+      "forgot_password": "Quên mật khẩu",
+      "dont_have_an_account": "Chưa có tài khoản",
+      "register": "Đăng ký"
+    },
+    "register": {
+      "title": "Đăng ký",
+      "description": "Tạo tài khoản để truy cập nền tảng quản lý doanh nghiệp của bạn",
+      "full_name": "Họ và tên",
+      "email": "Email",
+      "password": "Mật khẩu",
+      "confirm_password": "Xác nhận mật khẩu",
+      "email_placeholder": "Nhập email của bạn",
+      "password_placeholder": "Nhập mật khẩu của bạn",
+      "full_name_placeholder": "Nhập họ và tên của bạn",
+      "confirm_password_placeholder": "Xác nhận mật khẩu của bạn",
+      "already_have_account": "Đã có tài khoản",
+      "validation": {
+        "email_required": "Email là bắt buộc",
+        "email_invalid": "Vui lòng nhập email hợp lệ",
+        "password_required": "Mật khẩu là bắt buộc",
+        "password_min": "Mật khẩu phải có ít nhất 8 ký tự",
+        "password_special": "Mật khẩu phải chứa ít nhất một ký tự đặc biệt",
+        "password_upper": "Mật khẩu phải chứa ít nhất một chữ hoa",
+        "password_lower": "Mật khẩu phải chứa ít nhất một chữ thường",
+        "password_digit": "Mật khẩu phải chứa ít nhất một số",
+        "confirm_password_required": "Xác nhận mật khẩu là bắt buộc",
+        "confirm_password_must_match": "Mật khẩu phải trùng khớp",
+        "full_name_required": "Họ và tên là bắt buộc"
+      },
+      "confirmation": {
+        "check_mail": "Kiểm tra email của bạn",
+        "description": "Chúng tôi đã gửi liên kết xác minh đến email của bạn. Vui lòng mở liên kết để xác minh tài khoản và hoàn tất đăng ký",
+        "msg": "Không nhận được email? Kiểm tra thư mục spam hoặc thử lại sau một phút",
+        "go_to_login": "Đi đến đăng nhập"
+      }
+    },
+    "forgot_password": {
+      "title": "Quên mật khẩu",
+      "description": "Khôi phục mật khẩu của bạn",
+      "email": "Email",
+      "email_placeholder": "Nhập email",
+      "validation": {
+        "email_required": "Email là bắt buộc",
+        "email_invalid": "Vui lòng nhập email hợp lệ"
+      },
+      "submit": "Gửi"
+    },
+    "reset_password": {
+      "title": "Đặt mật khẩu mới",
+      "new_password": "Mật khẩu mới",
+      "err_title": "Đã xảy ra sự cố",
+      "err_description": "Lỗi không mong muốn, vui lòng thử lại",
+      "try_again": "Thử lại",
+      "confirm_password": "Xác nhận mật khẩu",
+      "update_password": "Cập nhật mật khẩu",
+      "back_to_signin": "Quay lại đăng nhập",
+      "validation": {
+        "password_required": "Mật khẩu là bắt buộc",
+        "password_min": "Mật khẩu phải có ít nhất 8 ký tự",
+        "password_special": "Mật khẩu phải chứa ít nhất một ký tự đặc biệt",
+        "password_upper": "Mật khẩu phải chứa ít nhất một chữ hoa",
+        "password_lower": "Mật khẩu phải chứa ít nhất một chữ thường",
+        "password_digit": "Mật khẩu phải chứa ít nhất một số",
+        "confirm_password_required": "Xác nhận mật khẩu là bắt buộc",
+        "confirm_password_must_match": "Mật khẩu phải trùng khớp"
+      }
+    },
+    "verify_account": {
+      "loading_txt": "Xác minh tài khoản",
+      "code_not_found": "Không tìm thấy mã xác minh"
     }
   }
 }

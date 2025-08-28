@@ -5,6 +5,7 @@ import { createDoctorAction, updateDoctorAction } from "@/actions/doctor.action"
 import { Dialog, Transition } from "@headlessui/react";
 import clsx from "clsx";
 import { useFormik } from "formik";
+import { LoaderCircle } from "lucide-react";
 import { Fragment, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -26,9 +27,9 @@ interface IProps {
 const schema = Yup.object({
   full_name: Yup.string()
     .trim()
-    .min(2, "Name must be at least 2 characters")
-    .max(100, "Name must be at most 100 characters")
-    .required("Full name is required"),
+    .min(2, "provider.validation.full_name_min")
+    .max(100, "provider.validation.full_name_max")
+    .required("provider.validation.full_name_required"),
 });
 
 const CreateProvider: React.FC<IProps> = ({
@@ -46,7 +47,7 @@ const CreateProvider: React.FC<IProps> = ({
   const open = state ?? internalOpen;
   const setOpen = setState ?? setInternalOpen;
 
-  const isEditing = Boolean(deafultValues?.id);
+  const isUpdateMode = Boolean(deafultValues?.id);
   const initial = useMemo(
     () => ({ full_name: deafultValues?.full_name ?? "" }),
     [deafultValues?.full_name]
@@ -59,7 +60,7 @@ const CreateProvider: React.FC<IProps> = ({
     onSubmit: async (values, helpers) => {
       try {
         helpers.setSubmitting(true);
-        const mutation = isEditing ? updateDoctorAction : createDoctorAction;
+        const mutation = isUpdateMode ? updateDoctorAction : createDoctorAction;
 
         const res = await mutation({ ...values, id: deafultValues?.id });
         if (res.error) {
@@ -68,7 +69,7 @@ const CreateProvider: React.FC<IProps> = ({
         }
 
         onSuccess?.();
-        toast.success(isEditing ? "Provider updated" : "Provider created");
+        toast.success(isUpdateMode ? "Provider updated" : "Provider created");
         setOpen(false);
       } catch (e) {
         console.error(e);
@@ -89,7 +90,7 @@ const CreateProvider: React.FC<IProps> = ({
           onClick={() => setOpen(true)}
           className="rounded border border-dark px-3 py-2 text-sm font-medium hover:bg-white/5"
         >
-          {isEditing ? t("Provider.edit_provider") : t("Provider.create_provider")}
+          {isUpdateMode ? t("provider.edit_provider") : t("provider.create_provider")}
         </button>
       ) : (
         ""
@@ -123,13 +124,13 @@ const CreateProvider: React.FC<IProps> = ({
               >
                 <Dialog.Panel className="w-full max-w-md rounded-2xl bg-darker p-5 shadow-xl ring-1 ring-black/5">
                   <Dialog.Title className="text-base font-semibold">
-                    {isEditing ? `Edit ${title}` : `Create ${title}`}
+                    {isUpdateMode ? t("provider.edit_provider") : t("provider.create_provider")}
                   </Dialog.Title>
 
                   <form onSubmit={formik.handleSubmit} className="mt-4 space-y-4">
                     <div>
                       <label htmlFor="full_name" className="mb-1 block text-sm font-medium">
-                        Full name
+                        {t("provider.full_name")}
                       </label>
                       <input
                         id="full_name"
@@ -148,7 +149,7 @@ const CreateProvider: React.FC<IProps> = ({
                         autoFocus
                       />
                       {formik.touched.full_name && formik.errors.full_name && (
-                        <p className="mt-1 text-xs text-red-600">{formik.errors.full_name}</p>
+                        <p className="mt-1 text-xs text-red-600">{t(formik.errors.full_name)}</p>
                       )}
                     </div>
 
@@ -159,18 +160,19 @@ const CreateProvider: React.FC<IProps> = ({
                         className="rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                         disabled={formik.isSubmitting}
                       >
-                        Cancel
+                        {t("provider.cancel")}
                       </button>
                       <button
                         type="submit"
                         disabled={formik.isSubmitting || !formik.isValid}
-                        className="rounded-md bg-brand-blue-2 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+                        className="flex items-center gap-1 rounded-md bg-brand-blue-2 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
                       >
-                        {formik.isSubmitting
-                          ? isEditing
-                            ? "Saving..."
-                            : "Creating..."
-                          : (submitLabel ?? (isEditing ? "Save Changes" : "Create"))}
+                        {t("provider.save_changes")}{" "}
+                        {formik.isSubmitting ? (
+                          <LoaderCircle className="h-4 w-4 animate-spin" />
+                        ) : (
+                          ""
+                        )}
                       </button>
                     </div>
                   </form>

@@ -4,10 +4,10 @@ import { SectionSubTitle } from "@/components";
 import { cn } from "@/utils";
 import { Filter } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import AppointmentsTabs from "./AppointmentsTabs";
 import CallTabs from "./CallTabs";
 import ReviewsTabs from "./ReviewsTabs";
-import { useTranslation } from "react-i18next";
 
 const tabs = [
   // {
@@ -15,16 +15,16 @@ const tabs = [
   //   value: "all",
   // },
   {
-    label: "Appointments",
+    label: "nav.appointments",
     value: "appointments",
   },
   {
-    label: "Calls",
+    label: "nav.calls",
     value: "calls",
   },
 
   {
-    label: "Reviews",
+    label: "nav.reviews",
     value: "reviews",
   },
 ];
@@ -32,7 +32,7 @@ const tabs = [
 const HomeFeedTabs = () => {
   const [activeTab, setActiveTab] = useState(tabs[0].value);
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <div className="flex flex-col gap-6 rounded-xl border border-darker bg-darkest p-6 transition-all duration-300">
@@ -55,7 +55,7 @@ const HomeFeedTabs = () => {
                   tab.value === activeTab && "bg-brand-blue-2"
                 )}
               >
-                {tab.label}
+                {t(tab.label)}
               </button>
             ))}
           </div>

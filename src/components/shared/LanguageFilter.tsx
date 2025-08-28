@@ -5,7 +5,7 @@ import { Check, Globe } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import i18n from "../../../i18n";
 
-const languages = [
+export const languages = [
   {
     label: "English",
     shortLabel: "EN",
@@ -61,7 +61,6 @@ const LanguageFilter = ({ variant }: { variant: "settings" | "header" }) => {
     const langusage = languages.find((item) => item.value === lang);
     const currentLang = langusage || languages[0];
     setSelectedLanguage(currentLang);
-    i18n.changeLanguage(currentLang.value);
   }, []);
 
   return (

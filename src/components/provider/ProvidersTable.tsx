@@ -5,21 +5,22 @@ import { IDoctor } from "@/interface/doctor";
 import { format } from "date-fns";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import TableRowSkeleton from "../ui/TableRowSkeleton";
 import CreateProvider from "./CreateProvider";
 import DeleteProvider from "./DeleteProvider";
 import EditProvderInfo from "./EditProvderInfo";
 const providersTableHeaders = [
   {
-    label: "Full Name",
+    label: "provider.full_name",
     key: "full_name",
   },
   {
-    label: "Date Joined",
+    label: "provider.date_joined",
     key: "created_at",
   },
   {
-    label: "Actions",
+    label: "provider.actions",
     key: "action",
   },
 ];
@@ -28,6 +29,8 @@ const ProvidersTable = () => {
   const [doctors, setDoctors] = useState<IDoctor[]>([]);
   const [isLoading, setIsLoading] = useState(false); // ✅ added
   const [search, setSearch] = useDebounce("");
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -50,7 +53,7 @@ const ProvidersTable = () => {
               onChange={(e) => setSearch(e.target.value)}
               type="text"
               id="search"
-              placeholder="Search by Patient name, notes..."
+              placeholder={t("provider.search_placeholder")}
               className="flex h-9 w-full px-3 py-1 pl-10"
             />
           </div>
@@ -66,7 +69,7 @@ const ProvidersTable = () => {
                 key={header.key}
                 className="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap"
               >
-                {header.label}
+                {t(header.label)}
               </th>
             ))}
           </tr>

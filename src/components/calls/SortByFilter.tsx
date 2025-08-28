@@ -3,14 +3,15 @@
 import { cn } from "@/utils";
 import { Check, ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const sortBy = [
   {
-    label: "Newest",
+    label: "calls.newest",
     value: "desc",
   },
   {
-    label: "Oldest",
+    label: "calls.oldest",
     value: "asc",
   },
 ];
@@ -24,6 +25,8 @@ const SortByFilter: React.FC<IProps> = ({ onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   type SortByType = (typeof sortBy)[number];
   const [selectedSortBy, setSelectedSortBy] = useState<SortByType>(sortBy[0]);
+
+  const { t } = useTranslation();
 
   const handleSortByClick = (selected: SortByType) => {
     setSelectedSortBy(selected);
@@ -51,12 +54,12 @@ const SortByFilter: React.FC<IProps> = ({ onChange }) => {
   return (
     <div className="relative" ref={dropdownRef}>
       <div>
-        <label>Sort By</label>
+        <label>{t("calls.sort")}</label>
         <button
           className="flex w-36 items-center justify-between gap-2 rounded-[8px] border border-dark px-[16px] py-[7px] text-sm whitespace-nowrap text-light outline-0 placeholder:text-lighter focus:border-neutral"
           onClick={() => setIsOpen(!isOpen)}
         >
-          {selectedSortBy.label} <ChevronDown className="h-4 w-4" />
+          {t(selectedSortBy.label)} <ChevronDown className="h-4 w-4" />
         </button>
       </div>
 
@@ -75,7 +78,7 @@ const SortByFilter: React.FC<IProps> = ({ onChange }) => {
                   handleSortByClick(sortBy);
                 }}
               >
-                {sortBy.label}
+                {t(sortBy.label)}
                 {selectedSortBy.value === sortBy.value && (
                   <Check className="h-full max-h-4 w-full max-w-4" />
                 )}

@@ -4,6 +4,7 @@ import { verifyEmail } from "@/actions/auth.action";
 import { LoaderCircle } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const Page = () => {
   const searchParams = useSearchParams();
@@ -12,8 +13,10 @@ const Page = () => {
 
   const router = useRouter();
 
+  const { t } = useTranslation();
+
   const handleVerify = async () => {
-    if (!code) return setError("Verification code not found");
+    if (!code) return setError(t("verify_account.code_not_found"));
     const res = await verifyEmail(code);
     if (res?.error) return setError(res.error);
 
@@ -31,7 +34,7 @@ const Page = () => {
         <span className="capitalize">{error}</span>
       ) : (
         <span className="flex items-center justify-center gap-[8px]">
-          Verifying Account <LoaderCircle className="animate-spin" />
+          {t("verify_account.loading_txt")} <LoaderCircle className="animate-spin" />
         </span>
       )}
     </div>

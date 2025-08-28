@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 const SettingsPage = () => {
-  const {t} = useTranslation(); 
+  const { t } = useTranslation();
   const { user } = useAuth();
 
   const { isEmergencyPause, reason } = user?.user_metadata || {};
@@ -86,7 +86,7 @@ const SettingsPage = () => {
         {isPause && (
           <div>
             <label className="text-sm" htmlFor="reason-for-pause">
-              Reason for pause (shown to patients)
+              {t("settings.reasong_placeholder")}
             </label>
             <textarea
               value={reasonForPause}
@@ -112,7 +112,7 @@ const SettingsPage = () => {
         <SectionSubTitle
           icon={Globe}
           title={t("settings.language_preference")}
-          description= {t("settings.all_interface_text_supports")}
+          description={t("settings.all_interface_text_supports")}
         />
 
         <div className="flex items-center gap-4">

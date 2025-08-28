@@ -12,6 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import i18n from "../../../i18n";
 
 const SIDEBAR_OPEN = 256; // 16rem
@@ -37,6 +38,7 @@ const PageLayout = ({ children }: { children: React.ReactNode }) => {
     closed: { opacity: 0, x: -10 },
   } as const;
 
+  const { t } = useTranslation();
   if (isLoading) return <Loader className="h-screen" />;
 
   return (
@@ -122,7 +124,7 @@ const PageLayout = ({ children }: { children: React.ReactNode }) => {
                             sidebarOpen ? "ml-2 w-auto opacity-100" : "ml-0 w-0 opacity-0"
                           )}
                         >
-                          {link.label}
+                          {t(link.label)}
                         </motion.span>
                       </Link>
                     </motion.li>

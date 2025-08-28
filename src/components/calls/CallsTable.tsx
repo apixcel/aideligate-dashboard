@@ -15,26 +15,32 @@ import StatusFilter from "./StatusFilter";
 
 const callsTableHeaders = [
   {
-    label: "Caller",
+    label: "calls.caller",
     key: "caller",
   },
   {
-    label: "Status",
+    label: "calls.status",
     key: "status",
   },
   {
-    label: "Date/Time",
+    label: "calls.date_time",
     key: "dateTime",
   },
   {
-    label: "Note",
+    label: "calls.note",
     key: "note",
   },
   {
-    label: "Actions",
+    label: "calls.action",
     key: "actions",
   },
 ];
+
+const statusLocale = {
+  completed: "calls.completed",
+  missed: "calls.missed",
+  voicemail: "calls.voicemail",
+};
 
 const CallsTable = () => {
   const { t } = useTranslation();
@@ -89,7 +95,7 @@ const CallsTable = () => {
                 onChange={(e) => setSearch(e.target.value)}
                 type="text"
                 id="search"
-                placeholder="Search by caller, note"
+                placeholder={t("calls.search_placeholder")}
                 className="flex h-9 w-full px-3 py-1 pl-10"
               />
             </div>
@@ -121,7 +127,7 @@ const CallsTable = () => {
                       key={header.key}
                       className="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap"
                     >
-                      {header.label}
+                      {t(header.label)}
                     </th>
                   ))}
                 </tr>
@@ -146,7 +152,7 @@ const CallsTable = () => {
                                 : "bg-success/80"
                           }`}
                         >
-                          {row.status}
+                          {t(statusLocale[row.status])}
                         </span>
                       </td>
                       <td className="cursor-pointer p-2 align-middle whitespace-nowrap">

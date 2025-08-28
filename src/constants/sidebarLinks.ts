@@ -11,37 +11,37 @@ import {
 export const sidebarLinks = [
   {
     route: "/",
-    label: "Dashboard",
+    label: "nav.dashboard",
     icon: LayoutDashboard,
   },
   {
     route: "/calls",
-    label: "Calls",
+    label: "nav.calls",
     icon: Phone,
   },
   {
     route: "/provider",
-    label: "Providers",
+    label: "nav.provider",
     icon: UserRoundSearch,
   },
   {
     route: "/appointments",
-    label: "Appointments",
+    label: "nav.appointments",
     icon: Calendar,
   },
   {
     route: "/reviews",
-    label: "Reviews",
+    label: "nav.reviews",
     icon: Star,
   },
   {
     route: "/settings",
-    label: "Settings",
+    label: "nav.settings",
     icon: Settings,
   },
   {
     route: "/usage",
-    label: "Usage & Plan",
+    label: "nav.usage_plan",
     icon: ChartColumn,
   },
 ];
