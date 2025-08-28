@@ -3,6 +3,7 @@
     "nav": {
       "dashboard": "Dashboard",
       "calls": "Calls",
+      "provider": "Providers",
       "appointments": "Appointments",
       "reviews": "Reviews",
       "settings": "Settings",
@@ -33,6 +34,7 @@
       "call_Management": "Call Management",
       "view_Filter_manage": "View, filter, and manage all incoming and outgoing calls",
       "search": "Search",
+      "search_placeholder": "Search by caller, note",
       "status": "Status",
       "all_status": "All Status",
       "completed": "Completed",
@@ -41,7 +43,6 @@
       "sort": "Sort By",
       "newest": "Newest",
       "oldest": "Oldest",
-
       "caller": "Caller",
       "date_time": "Date/Time",
       "note": "Note",
@@ -52,7 +53,7 @@
       "prev": "Prev",
       "next": "Next"
     },
-    "Provider": {
+    "provider": {
       "title": "Providers",
       "description": "Manage your providers",
       "all_providers": "All Providers",
@@ -61,7 +62,15 @@
       "edit_provider": "Edit Provider",
       "full_name": "Full Name",
       "date_joined": "Date Joined",
-      "actions": "Actions"
+      "actions": "Actions",
+      "search_placeholder": "Search by Full name",
+      "save_changes": "Save Changes",
+      "cancel": "Cancel",
+      "validation": {
+        "full_name_required": "Full name is required",
+        "full_name_min": "Name must be at least 2 characters",
+        "full_name_max": "Name must be at most 100 characters"
+      }
     },
     "appointments": {
       "title": "Appointments",
@@ -69,6 +78,7 @@
       "all_appointments": "All Appointments",
       "view_filter_create": "View filter/create appointments",
       "search": "Search",
+      "search_placeholder": "Search by Patient name, notes...",
       "new_appointments": "New Appointments",
       "update_appointment": "Update Appointment",
       "create_new_appointment": "Create New Appointment",
@@ -99,10 +109,20 @@
       "row_per_page": "Rows Per Page",
       "page": "Page",
       "prev": "Prev",
-      "next": "Next"
+      "next": "Next",
+      "note_placeholder": "Add any notes about this appointment",
+      "validation": {
+        "patient_name_required": "Patient name is required",
+        "provider_required": "Select a provider",
+        "service_required": "Select a service",
+        "date_required": "Choose a date",
+        "time_required": "Choose a time",
+        "note_max": "Notes must be at most 500 characters"
+      }
     },
     "reviews": {
       "title": "Reviews",
+      "placeholder": "star review from",
       "description": "Manage customer reviews and feedback from all platforms",
       "customer_reviews": "Customer Reviews",
       "view_and_respond": "View and respond to reviews from Google, Facebook, and TripAdvisor",
@@ -119,6 +139,7 @@
       "replied": "Replied",
       "not_replied": "Not Replied",
       "reply": "Reply",
+      "edit_reply": "Edit Reply",
       "view_original": "View Original",
       "your_reply": "Your Reply",
       "row_per_page": "Rows Per Page",
@@ -134,18 +155,26 @@
       "to": "To",
       "add_window": "Add Window",
       "add_time_window": "Add Time Window",
-      "day_to_week": "Day to Week",
+      "day_of_week": "Day of Week",
       "start_time": "Start Time",
       "end_time": "End Time",
       "cancel": "Cancel",
       "add": "Add",
+      "reasong_placeholder": "Reason for pause (shown to patients)",
       "emergency_pause": "Emergency Pause",
       "temporarily_pause": "Temporarily pause all appointment scheduling",
       "save_changes": "Save Changes",
       "language_preference": "Language Preference",
       "all_interface_text_supports": "All interface text supports EN/VI via JSON resources.",
-      "interface_language": "Interface Language"
+      "interface_language": "Interface Language",
+      "time_block_validaton": {
+        "start_time_required": "Start time must be selected",
+        "end_time_required": "End time must be selected",
+        "end_time_after_start_time": "End time must be after start time",
+        "day_required": "Select a day"
+      }
     },
+
     "usage_plan": {
       "title": "Usage & Plan",
       "description": "Monitor your plan usage and billing information",
@@ -183,6 +212,23 @@
       "mondays_see_the_highest_call_volume": "Mondays see the highest call volume. Consider scheduling more staff during peak times.",
       "plan_optimization": "Plan Optimization",
       "your_usage_is_on_track": "Your usage is on track for this billing cycle."
+    },
+
+    "login": {
+      "title": "Login",
+      "description": "Sign in to access your business management platform",
+      "email": "Email",
+      "email_placeholder": "Enter your email",
+      "password": "Password",
+      "password_placeholder": "Enter your password",
+      "validation": {
+        "email_required": "Email is required",
+        "email_invalid": "Please enter a valid email",
+        "password_required": "Password is required"
+      },
+      "forgot_password": "Forgot Password",
+      "dont_have_an_account": "Don't have an account",
+      "register": "Register"
     }
   }
 }

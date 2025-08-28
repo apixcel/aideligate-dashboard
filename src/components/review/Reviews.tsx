@@ -3,6 +3,7 @@ import { getReviews, ListReviewsParams } from "@/actions/reviews.action";
 import { IReview } from "@/interface/review.interface";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import DropDownSelector from "../shared/DropDownSelector";
 import CreateOrUpDateReply from "./CreateOrUpDateReply";
 /** --- Small UI bits --- */
@@ -51,13 +52,15 @@ const ReviewCard = ({ review, onReply }: { review: IReview; onReply?: () => void
   const rawRating = Number(review.rating);
   const rating = Number.isFinite(rawRating) ? Math.max(0, Math.min(5, rawRating)) : 0;
 
+  const { t } = useTranslation();
+
   // >3 = Positive, =3 = Neutral, <3 = Negative
   const sentiment =
     rating > 3
-      ? { label: "Positive", tone: "green" as const }
+      ? { label: "reviews.positive", tone: "green" as const }
       : rating === 3
-        ? { label: "Neutral", tone: "slate" as const }
-        : { label: "Negative", tone: "red" as const };
+        ? { label: "reviews.neutral", tone: "slate" as const }
+        : { label: "reviews.negative", tone: "red" as const };
 
   const dateStr = review.created_at
     ? new Date(review.created_at as unknown as string).toLocaleDateString()
@@ -75,8 +78,8 @@ const ReviewCard = ({ review, onReply }: { review: IReview; onReply?: () => void
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <p className="font-medium">{name}</p>
-              <Badge tone={sentiment.tone}>{sentiment.label}</Badge>
-              {review.reply && <Badge tone="slate">Replied</Badge>}
+              <Badge tone={sentiment.tone}>{t(sentiment.label)}</Badge>
+              {review.reply && <Badge tone="slate">{t("reviews.replied")}</Badge>}
             </div>
 
             <div className="mt-1 flex flex-wrap items-center gap-2 text-sm">
@@ -100,7 +103,7 @@ const ReviewCard = ({ review, onReply }: { review: IReview; onReply?: () => void
             rel="noreferrer"
             className="inline-flex items-center gap-1 rounded-lg border border-light px-3 py-1.5 text-sm font-medium"
           >
-            ↗ View Original
+            ↗ {t("reviews.view_original")}
           </Link>
         </div>
       </div>
@@ -108,10 +111,9 @@ const ReviewCard = ({ review, onReply }: { review: IReview; onReply?: () => void
       {/* Body */}
       {review.text && <p className="mt-4 text-[15px] leading-6">{review.text}</p>}
 
-      {/* Your Reply */}
       {review.reply && (
         <div className="mt-5 border-l-2 border-emerald-400 pl-4">
-          <p className="text-sm font-medium text-emerald-700">Your Reply</p>
+          <p className="text-sm font-medium text-emerald-700">{t("reviews.your_reply")}</p>
           <p className="mt-1 text-sm">{review.reply}</p>
         </div>
       )}
@@ -123,6 +125,8 @@ const ReviewCard = ({ review, onReply }: { review: IReview; onReply?: () => void
 const Reviews = () => {
   const [data, setData] = useState<IReview[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const { t } = useTranslation();
 
   const [refetch, setRefetch] = useState(0);
 
@@ -154,14 +158,14 @@ const Reviews = () => {
     <div className="my-7">
       <div className="flex items-end justify-start gap-[15px]">
         <div className="flex flex-col gap-[10px]">
-          <span>Sentiment</span>
+          <span>{t("reviews.sentiment")}</span>
           <DropDownSelector
-            className="w-full max-w-[150px]"
+            containerClassName="w-full max-w-[150px]"
             data={[
-              { value: "", label: "All" },
-              { value: "positive", label: "Positive" },
-              { value: "negative", label: "Negative" },
-              { value: "neutral", label: "Neutral" },
+              { value: "", label: t("reviews.all") },
+              { value: "positive", label: t("reviews.positive") },
+              { value: "negative", label: t("reviews.negative") },
+              { value: "neutral", label: t("reviews.neutral") },
             ]}
             onChange={(e) => {
               const op =
@@ -177,12 +181,12 @@ const Reviews = () => {
           />
         </div>
         <div className="flex flex-col gap-[10px]">
-          <span>Source</span>
+          <span>{t("reviews.source")}</span>
           <DropDownSelector
-            className="w-full max-w-[150px]"
+            containerClassName="w-full max-w-[150px]"
             onChange={(value) => setQuery({ ...query, media: value.value as string })}
             data={[
-              { value: "", label: "All" },
+              { value: "", label: t("reviews.all") },
               { value: "facebook", label: "Facebook" },
               { value: "google", label: "Google" },
               { value: "x", label: "X" },
@@ -190,13 +194,13 @@ const Reviews = () => {
           />
         </div>
         <div className="flex flex-col gap-[10px]">
-          <span>Reply Status</span>
+          <span>{t("reviews.reply_status")}</span>
           <DropDownSelector
-            className="w-full max-w-[150px]"
+            containerClassName="w-full max-w-[150px]"
             data={[
-              { value: "", label: "All" },
-              { value: "replied", label: "Replied" },
-              { value: "not_replied", label: "Not Replied" },
+              { value: "", label: t("reviews.all") },
+              { value: "replied", label: t("reviews.replied") },
+              { value: "not_replied", label: t("reviews.not_replied") },
             ]}
             onChange={(value) =>
               setQuery({ ...query, replied: value.value as "replied" | "not_replied" })

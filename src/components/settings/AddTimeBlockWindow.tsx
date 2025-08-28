@@ -1,12 +1,14 @@
 "use client";
 import { createTimeBlocks } from "@/actions/timeBlock.action";
 import { Dialog, Transition } from "@headlessui/react";
-import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
-import { Clock, X } from "lucide-react";
+import { Field, Form, Formik, FormikHelpers } from "formik";
+import { Clock, LoaderCircle, X } from "lucide-react";
 import { Fragment, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import * as Yup from "yup";
 import DropDownSelector from "../shared/DropDownSelector";
-import { toast } from "sonner";
+import RenderFormErrorMessage from "../ui/RenderFormErrorMessage";
 const days = [
   { label: "Monday", value: 1 },
   { label: "Tuesday", value: 2 },
@@ -28,11 +30,13 @@ const toMinutes = (t: string) => {
 };
 
 const schema = Yup.object({
-  day_of_week: Yup.number().typeError("Select a day").required("Select a day"),
-  start_time: Yup.string().required("Start time is required"),
+  day_of_week: Yup.number()
+    .typeError("settings.time_block_validaton.day_required")
+    .required("settings.time_block_validaton.day_required"),
+  start_time: Yup.string().required("settings.time_block_validaton.start_time_required"),
   end_time: Yup.string()
-    .required("End time is required")
-    .test("is-after", "End time must be after start time", function (value) {
+    .required("settings.time_block_validaton.end_time_required")
+    .test("is-after", "settings.time_block_validaton.end_time_after_start_time", function (value) {
       const { start_time } = this.parent as typeof initialValues;
       if (!start_time || !value) return true; // other rules handle required
       return toMinutes(value) > toMinutes(start_time);
@@ -80,6 +84,8 @@ const AddTimeBlockWindow = ({
     onAdd?.(payload);
     close();
   };
+
+  const { t } = useTranslation();
   return (
     <>
       <button
@@ -88,7 +94,7 @@ const AddTimeBlockWindow = ({
         className="flex items-center justify-center gap-2 rounded-[8px] border border-darker bg-white-secondary px-[14px] py-[6px] font-[500] text-black-secondary hover:bg-white-secondary/90"
       >
         <Clock className="h-4 w-4" />
-        {label || "Add Window"}
+        {t(label || "settings.add_window")}
       </button>
 
       <Transition show={isOpen} as={Fragment}>
@@ -119,7 +125,9 @@ const AddTimeBlockWindow = ({
               >
                 <Dialog.Panel className="w-full max-w-md rounded-xl bg-darker p-5 shadow-xl ring-1 ring-black/10">
                   <div className="flex items-start justify-between">
-                    <Dialog.Title className="text-lg font-semibold">Add  Window</Dialog.Title>
+                    <Dialog.Title className="text-lg font-semibold">
+                      {t("settings.add_window")}
+                    </Dialog.Title>
                     <button
                       type="button"
                       onClick={close}
@@ -139,48 +147,42 @@ const AddTimeBlockWindow = ({
                       <Form className="mt-4 space-y-4">
                         {/* Day */}
                         <div>
-                          <label className="mb-1 block text-sm font-medium">Day of Week</label>
+                          <label className="mb-1 block text-sm font-medium">
+                            {t("settings.day_of_week")}
+                          </label>
                           <DropDownSelector
                             data={days}
                             onChange={(opt) =>
                               setFieldValue("day_of_week", opt?.value ?? null, true)
                             }
                           />
-                          <ErrorMessage
-                            name="day_of_week"
-                            component="p"
-                            className="mt-1 text-xs text-red-600"
-                          />
+                          <RenderFormErrorMessage name="day_of_week" />
                         </div>
 
                         {/* Times */}
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                           <div>
-                            <label className="mb-1 block text-sm font-medium">Start Time</label>
+                            <label className="mb-1 block text-sm font-medium">
+                              {t("settings.start_time")}
+                            </label>
                             <Field
                               type="time"
                               name="start_time"
                               className="w-full rounded-md border border-dark px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/20"
                             />
-                            <ErrorMessage
-                              name="start_time"
-                              component="p"
-                              className="mt-1 text-xs text-red-600"
-                            />
+                            <RenderFormErrorMessage name="start_time" />
                           </div>
 
                           <div>
-                            <label className="mb-1 block text-sm font-medium">End Time</label>
+                            <label className="mb-1 block text-sm font-medium">
+                              {t("settings.end_time")}
+                            </label>
                             <Field
                               type="time"
                               name="end_time"
                               className="w-full rounded-md border border-dark px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black/20"
                             />
-                            <ErrorMessage
-                              name="end_time"
-                              component="p"
-                              className="mt-1 text-xs text-red-600"
-                            />
+                            <RenderFormErrorMessage name="end_time" />
                           </div>
                         </div>
 
@@ -190,14 +192,15 @@ const AddTimeBlockWindow = ({
                             onClick={close}
                             className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                           >
-                            Cancel
+                            {t("settings.cancel")}
                           </button>
                           <button
                             type="submit"
                             disabled={isSubmitting || !dirty || !isValid}
-                            className="rounded-lg bg-brand-blue-2 px-4 py-2 text-sm font-medium text-white hover:bg-black/90 disabled:cursor-not-allowed disabled:opacity-50"
+                            className="flex items-center gap-1 rounded-lg bg-brand-blue-2 px-4 py-2 text-sm font-medium text-white hover:bg-black/90 disabled:cursor-not-allowed disabled:opacity-50"
                           >
-                            {isSubmitting ? "Adding..." : "Add"}
+                            {t("settings.add")}{" "}
+                            {isSubmitting ? <LoaderCircle className="h-4 w-4 animate-spin" /> : ""}
                           </button>
                         </div>
                       </Form>

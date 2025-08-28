@@ -1,25 +1,22 @@
 "use client";
 
 import { signInAction } from "@/actions/auth.action";
-import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
+import RenderFormErrorMessage from "@/components/ui/RenderFormErrorMessage";
+import { Field, Form, Formik, FormikHelpers } from "formik";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import * as Yup from "yup";
 
 // Yup schema: email OR username, plus password
 const LoginSchema = Yup.object({
   identifier: Yup.string()
-    .required("Email or username is required")
-    .test("email-or-username", "Enter a valid email or username", (value) => {
-      if (!value) return false;
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-      const usernameRegex = /^[a-zA-Z0-9._-]{3,}$/; // simple username rule (3+ chars)
-      return emailRegex.test(value) || usernameRegex.test(value);
-    }),
-  password: Yup.string().min(8, "At least 8 characters").required("Password is required"),
+    .required("login.validation.email_required")
+    .email("login.validation.email_invalid"),
+  password: Yup.string().required("login.validation.password_required"),
 });
 
 const initialValues = {
@@ -31,6 +28,9 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
+
+  const { t } = useTranslation();
+
   const handleSubmit = async (
     values: typeof initialValues,
     helper: FormikHelpers<typeof initialValues>
@@ -55,31 +55,30 @@ const Login = () => {
     <>
       {/* header */}
       <div className="flex flex-col gap-2 text-center">
-        <h2 className="text-3xl font-bold">Login</h2>
-        <p className="text-sm text-light">Sign in to access your business management platform</p>
+        <h2 className="text-3xl font-bold">{t("login.title")}</h2>
+        <p className="text-sm text-light">{t("login.description")}</p>
       </div>
 
-      {/* form */}
       <Formik initialValues={initialValues} validationSchema={LoginSchema} onSubmit={handleSubmit}>
-        {({ isSubmitting, setFieldValue }) => (
+        {({ isSubmitting }) => (
           <Form className="flex flex-col gap-4" noValidate>
             {/* email / username */}
             <div>
-              <label htmlFor="identifier">Email / Username</label>
+              <label htmlFor="identifier">{t("login.email")}</label>
               <Field
                 id="identifier"
                 name="identifier"
                 type="text"
-                placeholder="Enter your email or username"
+                placeholder={t("login.email_placeholder")}
                 className="w-full"
                 autoComplete="username"
               />
-              <ErrorMessage name="identifier" component="p" className="mt-1 text-sm text-red-500" />
+              <RenderFormErrorMessage name="identifier" />
             </div>
 
             {/* password */}
             <div>
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password">{t("login.password")}</label>
               <div className="relative">
                 <Field
                   id="password"
@@ -98,7 +97,7 @@ const Login = () => {
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
-              <ErrorMessage name="password" component="p" className="mt-1 text-sm text-red-500" />
+              <RenderFormErrorMessage name="password" />
             </div>
 
             {/* submit button */}
@@ -115,12 +114,12 @@ const Login = () => {
 
       <div className="flex flex-col items-center justify-center gap-2">
         <Link className="text-sm hover:underline" href="/forgot-password">
-          Forgot Password?
+          {t("login.forgot_password")}?
         </Link>
         <p className="text-sm text-light">
-          Don&apos;t have an account?{" "}
+          {t("login.dont_have_an_account")}?{" "}
           <Link className="text-sm text-lightest hover:underline" href="/register">
-            Register
+            {t("login.register")}
           </Link>
         </p>
       </div>

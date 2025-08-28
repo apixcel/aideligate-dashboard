@@ -1,6 +1,7 @@
 import { getAllDoctors } from "@/actions/doctor.action";
 import { IDoctor } from "@/interface/doctor";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { twMerge } from "tailwind-merge";
 
 interface IProps {
@@ -11,6 +12,8 @@ interface IProps {
 }
 const DoctorSelector: React.FC<IProps> = ({ onChange, className, onBlur, defaultValue }) => {
   const [doctors, setDoctors] = useState<IDoctor[]>([]);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     const getDoctors = async () => {
@@ -29,7 +32,7 @@ const DoctorSelector: React.FC<IProps> = ({ onChange, className, onBlur, default
       onChange={(e) => onChange(e.target.value)}
     >
       <option value="" hidden>
-        Select a doctor
+        {t("appointments.select_a_doctor")}
       </option>
       {doctors.map((d) => (
         <option key={d.id} value={d.id}>

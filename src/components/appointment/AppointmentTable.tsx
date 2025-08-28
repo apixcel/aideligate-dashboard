@@ -6,6 +6,7 @@ import { IAppointment, TAppointmentStatus } from "@/interface/appointment.interf
 import { format } from "date-fns";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { twMerge } from "tailwind-merge";
 import MonthNavigator from "../shared/MonthNavigator";
 import Pagination from "../shared/Pagination";
@@ -14,35 +15,42 @@ import AppointmentActions from "./action/AppointmentActions";
 import DoctorSelector from "./DoctorSelector";
 const appointmenTableHeaders = [
   {
-    label: "Patient Name",
+    label: "appointments.patient_name",
     key: "patient_name",
   },
   {
-    label: "Provider",
+    label: "appointments.provider",
     key: "doctor.full_name",
   },
   {
-    label: "Status",
+    label: "appointments.status",
     key: "status",
   },
   {
-    label: "Service Type",
+    label: "appointments.service_type_",
     key: "service_type",
   },
   {
-    label: "Date/Time",
+    label: "appointments.date_time",
     key: "date_time",
   },
   {
-    label: "Note",
+    label: "appointments.notes",
     key: "notes",
     className: "min-w-[180px]",
   },
   {
-    label: "Actions",
+    label: "appointments.action",
     key: "action",
   },
 ];
+
+const appointmentStatusLocale = {
+  scheduled: "appointments.scheduled",
+  completed: "appointments.completed",
+  cancelled: "appointments.cancelled",
+};
+
 interface IProps {
   refetch: number;
   setRefetch: React.Dispatch<React.SetStateAction<number>>;
@@ -60,6 +68,8 @@ const AppointmentTable: React.FC<IProps> = ({ refetch, setRefetch }) => {
   });
   const [search, setSearch] = useDebounce("");
   const [totalPages, setTotalPages] = useState(1);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -86,14 +96,14 @@ const AppointmentTable: React.FC<IProps> = ({ refetch, setRefetch }) => {
       <MonthNavigator onChange={(date) => setQuery({ ...query, from: date.toString() })} />
       <div className="mb-6 flex flex-col items-start justify-between gap-4 md:flex-row">
         <div className="w-full max-w-[450px]">
-          <label htmlFor="search">Search</label>
+          <label htmlFor="search">{t("appointments.search")}</label>
           <div className="relative text-lighter">
             <Search className="text-muted-foreground absolute top-2.5 left-3 h-4 w-4" />
             <input
               onChange={(e) => setSearch(e.target.value)}
               type="text"
               id="search"
-              placeholder="Search by Patient name, notes..."
+              placeholder={t("appointments.search_placeholder")}
               className="flex h-9 w-full px-3 py-1 pl-10"
             />
           </div>
@@ -105,15 +115,15 @@ const AppointmentTable: React.FC<IProps> = ({ refetch, setRefetch }) => {
             <DoctorSelector onChange={(value) => setQuery({ ...query, doctor_id: value })} />
           </div>
           <div>
-            <label>Status</label>
+            <label>{t("appointments.status")}</label>
             <select onChange={(e) => setQuery({ ...query, status: e.target.value })}>
               <option value={""} hidden>
-                Status
+                {t("appointments.status")}
               </option>
 
               {["scheduled", "completed", "cancelled"].map((status) => (
                 <option key={status} value={status} className="capitalize">
-                  {status}
+                  {t(appointmentStatusLocale[status as keyof typeof appointmentStatusLocale])}
                 </option>
               ))}
             </select>
@@ -134,7 +144,7 @@ const AppointmentTable: React.FC<IProps> = ({ refetch, setRefetch }) => {
                       header.className
                     )}
                   >
-                    {header.label}
+                    {t(header.label)}
                   </th>
                 ))}
               </tr>
@@ -161,7 +171,7 @@ const AppointmentTable: React.FC<IProps> = ({ refetch, setRefetch }) => {
                       <span
                         className={`rounded-md px-2 py-1 text-sm text-white capitalize ${row.status === "scheduled" ? "bg-brand-blue-2/80" : row.status === "cancelled" ? "bg-red/80" : "bg-success/80"}`}
                       >
-                        {row.status}
+                        {t(appointmentStatusLocale[row.status || "scheduled"])}
                       </span>
                     </td>
 

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { HomeFeedTabs, HomeStatisticsCards, SectionTitle } from "@/components";
 import CreateAppointment from "@/components/appointment/CreateAppointment";
 import AddTimeBlockWindow from "@/components/settings/AddTimeBlockWindow";
@@ -6,7 +6,7 @@ import AddTimeBlockWindow from "@/components/settings/AddTimeBlockWindow";
 import { useTranslation } from "react-i18next";
 
 const Home = () => {
-    const {t} = useTranslation();
+  const { t } = useTranslation();
   return (
     <>
       <SectionTitle
@@ -20,7 +20,7 @@ const Home = () => {
       {/* quick actions button */}
       <div className="flex gap-4">
         <CreateAppointment />
-        <AddTimeBlockWindow label={t("dashboard_overview.add_time_block")} />
+        <AddTimeBlockWindow label={"dashboard_overview.add_time_block"} />
       </div>
 
       {/* feed tabs component */}

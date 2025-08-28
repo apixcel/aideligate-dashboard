@@ -5,11 +5,13 @@ import { IFeedCard } from "@/types";
 import { format } from "date-fns";
 import { Star } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import HomeFeedTabCard from "./HomeFeedTabCard";
 
 const ReviewsTabs = () => {
   const [reviews, setReviews] = useState<IReview[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetch = async () => {
@@ -36,7 +38,7 @@ const ReviewsTabs = () => {
             icon: Star,
             id: item.id,
             time: format(new Date(item.created_at), "MMM dd, h:mm a"),
-            title: `New ${item.rating}-star review from ${item.user_name}`,
+            title: `${item.rating} ${t("reviews.placeholder")} ${item.user_name}`,
           };
           return <HomeFeedTabCard key={item.id} item={data} />;
         })

@@ -10,9 +10,17 @@ interface IProps {
   data: { value: string | number; label: string | number }[];
   className?: string;
   defaultValue?: { value: string | number; label: string | number };
+
+  containerClassName?: string;
 }
 
-const DropDownSelector: React.FC<IProps> = ({ onChange, data, className, defaultValue }) => {
+const DropDownSelector: React.FC<IProps> = ({
+  onChange,
+  data,
+  className,
+  defaultValue,
+  containerClassName,
+}) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   type SortByType = (typeof data)[number];
@@ -42,7 +50,7 @@ const DropDownSelector: React.FC<IProps> = ({ onChange, data, className, default
   }, [isOpen]);
 
   return (
-    <div className={"relative"} ref={dropdownRef}>
+    <div className={twMerge("relative", containerClassName)} ref={dropdownRef}>
       <button
         type="button"
         className={twMerge(

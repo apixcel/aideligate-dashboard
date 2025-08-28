@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import * as Yup from "yup";
 import DropDownSelector from "../shared/DropDownSelector";
+import RenderFormErrorMessage from "../ui/RenderFormErrorMessage";
 import DoctorSelector from "./DoctorSelector";
 const initialValues = {
   patient_name: "",
@@ -20,13 +21,17 @@ const initialValues = {
   status: "scheduled",
 };
 
+const appointmentValidaatonPrefix = "appointments.validation.";
+
 const AppointmentSchema = Yup.object({
-  patient_name: Yup.string().trim().required("Patient name is required"),
-  doctor_id: Yup.string().required("Select a provider"),
-  service_type: Yup.string().required("Select a service"),
-  date: Yup.string().required("Choose a date"),
-  time: Yup.string().required("Choose a time"),
-  notes: Yup.string().max(500, "Notes must be at most 500 characters"),
+  patient_name: Yup.string()
+    .trim()
+    .required(appointmentValidaatonPrefix + "patient_name_required"),
+  doctor_id: Yup.string().required(appointmentValidaatonPrefix + "provider_required"),
+  service_type: Yup.string().required(appointmentValidaatonPrefix + "service_required"),
+  date: Yup.string().required(appointmentValidaatonPrefix + "date_required"),
+  time: Yup.string().required(appointmentValidaatonPrefix + "time_required"),
+  notes: Yup.string().max(500, appointmentValidaatonPrefix + "note_max"),
   status: Yup.string().optional(),
 });
 
@@ -112,7 +117,7 @@ const CreateAppointment: React.FC<IProps> = ({
           onClick={() => setOpen(true)}
           className="flex items-center justify-center gap-[10px] rounded-[8px] bg-brand-blue-2 px-[15px] py-[8px] text-white"
         >
-          New Appointment <Plus />
+          {t("dashboard_overview.new_appointments")} <Plus />
         </button>
       ) : (
         ""
@@ -127,7 +132,11 @@ const CreateAppointment: React.FC<IProps> = ({
               <div className="flex items-start justify-between">
                 <div>
                   <DialogTitle className="text-lg font-semibold">
-                    {defaultValues ? "Update Appointment" : "Create New Appointment"}
+                    {t(
+                      defaultValues
+                        ? "appointments.update_appointment"
+                        : "appointments.create_new_appointment"
+                    )}
                   </DialogTitle>
                   <p className="mt-1 text-sm">{t("appointments.fill_in_the_appointment")}</p>
                 </div>
@@ -169,11 +178,7 @@ const CreateAppointment: React.FC<IProps> = ({
                         placeholder={t("appointments.enter_patient_name")}
                         className="mt-1 w-full"
                       />
-                      <ErrorMessage
-                        name="patient_name"
-                        component="p"
-                        className="mt-1 text-sm text-red-600"
-                      />
+                      <RenderFormErrorMessage name="patient_name" />
                     </div>
 
                     {/* Provider */}
@@ -187,11 +192,7 @@ const CreateAppointment: React.FC<IProps> = ({
                           onBlur={() => setFieldTouched("doctor_id", true)}
                           onChange={(e) => setFieldValue("doctor_id", e)}
                         />
-                        <ErrorMessage
-                          name="doctor_id"
-                          component="p"
-                          className="mt-1 text-sm text-red-600"
-                        />
+                        <RenderFormErrorMessage name="doctor_id" />
                       </div>{" "}
                       {defaultValues ? (
                         <div className="w-full">
@@ -215,11 +216,7 @@ const CreateAppointment: React.FC<IProps> = ({
                               { value: "cancelled", label: "Cancelled" },
                             ]}
                           />
-                          <ErrorMessage
-                            name="status"
-                            component="p"
-                            className="mt-1 text-sm text-red-600"
-                          />
+                          <RenderFormErrorMessage name="status" />
                         </div>
                       ) : (
                         ""
@@ -244,11 +241,7 @@ const CreateAppointment: React.FC<IProps> = ({
                         <option value="Follow-up">{t("appointments.follow_up")}</option>
                         <option value="Physical Exam">{t("appointments.physical_exam")}</option>
                       </Field>
-                      <ErrorMessage
-                        name="service_type"
-                        component="p"
-                        className="mt-1 text-sm text-red-600"
-                      />
+                      <RenderFormErrorMessage name="service_type" />
                     </div>
 
                     {/* Date & Time */}
@@ -258,22 +251,14 @@ const CreateAppointment: React.FC<IProps> = ({
                           {t("appointments.date")}
                         </label>
                         <Field id="date" name="date" type="date" className="mt-1 w-full" />
-                        <ErrorMessage
-                          name="date"
-                          component="p"
-                          className="mt-1 text-sm text-red-600"
-                        />
+                        <RenderFormErrorMessage name="date" />
                       </div>
                       <div>
                         <label htmlFor="time" className="block text-sm font-medium">
                           {t("appointments.time")}
                         </label>
                         <Field id="time" name="time" type="time" className="mt-1 w-full" />
-                        <ErrorMessage
-                          name="time"
-                          component="p"
-                          className="mt-1 text-sm text-red-600"
-                        />
+                        <RenderFormErrorMessage name="time" />
                       </div>
                     </div>
 
@@ -287,7 +272,7 @@ const CreateAppointment: React.FC<IProps> = ({
                         id="notes"
                         name="notes"
                         rows={4}
-                        placeholder="Add any notes about this appointment"
+                        placeholder={t("appointments.note_placeholder")}
                         className="mt-1 w-full resize-y"
                       />
                       <ErrorMessage

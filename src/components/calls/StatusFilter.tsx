@@ -7,19 +7,19 @@ import { useTranslation } from "react-i18next";
 
 const status = [
   {
-    label: "All Status",
+    label: "calls.all_status",
     value: "",
   },
   {
-    label: "Completed",
+    label: "calls.completed",
     value: "completed",
   },
   {
-    label: "Missed",
+    label: "calls.missed",
     value: "missed",
   },
   {
-    label: "Voicemail",
+    label: "calls.voicemail",
     value: "voicemail",
   },
 ];
@@ -55,17 +55,17 @@ const StatusFilter: React.FC<IProps> = ({ onChange }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <div className="relative" ref={dropdownRef}>
       <div>
         <label>{t("calls.status")}</label>
         <button
-          className="flex w-36 items-center justify-between gap-2 rounded-[8px] border border-dark px-[16px] py-[7px] text-sm whitespace-nowrap text-light outline-0 placeholder:text-lighter focus:border-neutral"
+          className="flex min-w-36 items-center justify-between gap-2 rounded-[8px] border border-dark px-[16px] py-[7px] text-sm whitespace-nowrap text-light outline-0 placeholder:text-lighter focus:border-neutral"
           onClick={() => setIsOpen(!isOpen)}
         >
-          {selectedStatus.label} <ChevronDown className="h-4 w-4" />
+          {t(selectedStatus.label)} <ChevronDown className="h-4 w-4" />
         </button>
       </div>
 
@@ -84,7 +84,7 @@ const StatusFilter: React.FC<IProps> = ({ onChange }) => {
                   handleStatusClick(status);
                 }}
               >
-                {status.label}
+                {t(status.label)}
                 {selectedStatus.value === status.value && <Check className="h-4 w-4" />}
               </button>
             ))}

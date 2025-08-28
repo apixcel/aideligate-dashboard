@@ -27,8 +27,7 @@ const Star = ({ filled }: { filled: boolean }) => (
 );
 
 export default function CreateOrUpDateReply({ review, onSuccess }: Props) {
-  
- const { t } = useTranslation();
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [reply, setReply] = useState(review.reply ?? "");
   const [saving, setSaving] = useState(false);
@@ -48,7 +47,6 @@ export default function CreateOrUpDateReply({ review, onSuccess }: Props) {
     }
   }
 
-
   return (
     <>
       {/* Trigger */}
@@ -57,7 +55,7 @@ export default function CreateOrUpDateReply({ review, onSuccess }: Props) {
         className="inline-flex items-center gap-1 rounded-lg border border-light px-3 py-1.5 text-sm font-medium"
         onClick={() => setIsOpen(true)}
       >
-        ↩︎ {review.reply ? "Edit Reply" : "Reply"}
+        ↩︎ {t(review.reply ? "reviews.edit_reply" : "reviews.reply")}
       </button>
 
       {/* Dialog */}
@@ -126,7 +124,10 @@ export default function CreateOrUpDateReply({ review, onSuccess }: Props) {
 
                   {/* Reply form */}
                   <form onSubmit={handleSubmit} className="mt-4">
-                    <label className="mb-1 block text-sm font-medium"> {t("reviews.your_reply")} </label>
+                    <label className="mb-1 block text-sm font-medium">
+                      {" "}
+                      {t("reviews.your_reply")}{" "}
+                    </label>
                     <div className="relative">
                       <textarea
                         value={reply}
