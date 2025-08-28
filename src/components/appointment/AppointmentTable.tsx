@@ -111,7 +111,7 @@ const AppointmentTable: React.FC<IProps> = ({ refetch, setRefetch }) => {
 
         <div className="flex gap-[20px]">
           <div>
-            <label>Provider</label>
+            <label>{t("appointments.provider")} </label>
             <DoctorSelector onChange={(value) => setQuery({ ...query, doctor_id: value })} />
           </div>
           <div>

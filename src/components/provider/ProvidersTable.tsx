@@ -46,7 +46,7 @@ const ProvidersTable = () => {
     <div className="flex w-full flex-col gap-[20px]">
       <div className="flex w-full items-center justify-between gap-[10px]">
         <div className="w-full max-w-[450px]">
-          <label htmlFor="search">Search</label>
+          <label htmlFor="search">{t("calls.search")}</label>
           <div className="relative text-lighter">
             <Search className="text-muted-foreground absolute top-2.5 left-3 h-4 w-4" />
             <input
