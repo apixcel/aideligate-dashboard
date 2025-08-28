@@ -226,6 +226,73 @@
       "forgot_password": "Quên mật khẩu",
       "dont_have_an_account": "Chưa có tài khoản",
       "register": "Đăng ký"
+    },
+    "register": {
+      "title": "Đăng ký",
+      "description": "Tạo tài khoản để truy cập nền tảng quản lý doanh nghiệp của bạn",
+      "full_name": "Họ và tên",
+      "email": "Email",
+      "password": "Mật khẩu",
+      "confirm_password": "Xác nhận mật khẩu",
+      "email_placeholder": "Nhập email của bạn",
+      "password_placeholder": "Nhập mật khẩu của bạn",
+      "full_name_placeholder": "Nhập họ và tên của bạn",
+      "confirm_password_placeholder": "Xác nhận mật khẩu của bạn",
+      "already_have_account": "Đã có tài khoản",
+      "validation": {
+        "email_required": "Email là bắt buộc",
+        "email_invalid": "Vui lòng nhập email hợp lệ",
+        "password_required": "Mật khẩu là bắt buộc",
+        "password_min": "Mật khẩu phải có ít nhất 8 ký tự",
+        "password_special": "Mật khẩu phải chứa ít nhất một ký tự đặc biệt",
+        "password_upper": "Mật khẩu phải chứa ít nhất một chữ hoa",
+        "password_lower": "Mật khẩu phải chứa ít nhất một chữ thường",
+        "password_digit": "Mật khẩu phải chứa ít nhất một số",
+        "confirm_password_required": "Xác nhận mật khẩu là bắt buộc",
+        "confirm_password_must_match": "Mật khẩu phải trùng khớp",
+        "full_name_required": "Họ và tên là bắt buộc"
+      },
+      "confirmation": {
+        "check_mail": "Kiểm tra email của bạn",
+        "description": "Chúng tôi đã gửi liên kết xác minh đến email của bạn. Vui lòng mở liên kết để xác minh tài khoản và hoàn tất đăng ký",
+        "msg": "Không nhận được email? Kiểm tra thư mục spam hoặc thử lại sau một phút",
+        "go_to_login": "Đi đến đăng nhập"
+      }
+    },
+    "forgot_password": {
+      "title": "Quên mật khẩu",
+      "description": "Khôi phục mật khẩu của bạn",
+      "email": "Email",
+      "email_placeholder": "Nhập email",
+      "validation": {
+        "email_required": "Email là bắt buộc",
+        "email_invalid": "Vui lòng nhập email hợp lệ"
+      },
+      "submit": "Gửi"
+    },
+    "reset_password": {
+      "title": "Đặt mật khẩu mới",
+      "new_password": "Mật khẩu mới",
+      "err_title": "Đã xảy ra sự cố",
+      "err_description": "Lỗi không mong muốn, vui lòng thử lại",
+      "try_again": "Thử lại",
+      "confirm_password": "Xác nhận mật khẩu",
+      "update_password": "Cập nhật mật khẩu",
+      "back_to_signin": "Quay lại đăng nhập",
+      "validation": {
+        "password_required": "Mật khẩu là bắt buộc",
+        "password_min": "Mật khẩu phải có ít nhất 8 ký tự",
+        "password_special": "Mật khẩu phải chứa ít nhất một ký tự đặc biệt",
+        "password_upper": "Mật khẩu phải chứa ít nhất một chữ hoa",
+        "password_lower": "Mật khẩu phải chứa ít nhất một chữ thường",
+        "password_digit": "Mật khẩu phải chứa ít nhất một số",
+        "confirm_password_required": "Xác nhận mật khẩu là bắt buộc",
+        "confirm_password_must_match": "Mật khẩu phải trùng khớp"
+      }
+    },
+    "verify_account": {
+      "loading_txt": "Xác minh tài khoản",
+      "code_not_found": "Không tìm thấy mã xác minh"
     }
   }
 }

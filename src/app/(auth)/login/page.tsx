@@ -3,7 +3,7 @@
 import { signInAction } from "@/actions/auth.action";
 import RenderFormErrorMessage from "@/components/ui/RenderFormErrorMessage";
 import { Field, Form, Formik, FormikHelpers } from "formik";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -106,7 +106,8 @@ const Login = () => {
               disabled={isSubmitting}
               className="flex items-center justify-center gap-2 rounded-[8px] bg-brand-blue-2 px-[14px] py-[6px] font-[500] text-white hover:bg-brand-blue-2/80 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {isSubmitting ? "Logging in..." : "Login"}
+              {t("login.title")}
+              {isSubmitting ? <LoaderCircle className="h-4 w-4 animate-spin" /> : ""}
             </button>
           </Form>
         )}
@@ -119,7 +120,7 @@ const Login = () => {
         <p className="text-sm text-light">
           {t("login.dont_have_an_account")}?{" "}
           <Link className="text-sm text-lightest hover:underline" href="/register">
-            {t("login.register")}
+            {t("register.title")}
           </Link>
         </p>
       </div>
