@@ -5,10 +5,12 @@ import { useAuth } from "@/hooks/useAuth";
 import { Menu, Transition } from "@headlessui/react";
 import { LogOut, User as UserIcon } from "lucide-react";
 import { Fragment } from "react";
+import { useTranslation } from "react-i18next";
 
 const UserDropdown = () => {
-  const { user } = useAuth(); // assuming useAuth provides user + logout()
+  const { user } = useAuth();
 
+  const { t } = useTranslation();
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -43,7 +45,7 @@ const UserDropdown = () => {
                   } flex w-full items-center gap-2 px-4 py-2 text-sm`}
                 >
                   <LogOut className="h-4 w-4" />
-                  Logout
+                  {t("logout")}
                 </button>
               )}
             </Menu.Item>

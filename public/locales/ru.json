@@ -1,5 +1,6 @@
 {
   "translation": {
+    "logout": "Выход",
     "nav": {
       "dashboard": "Панель",
       "calls": "Звонки",
