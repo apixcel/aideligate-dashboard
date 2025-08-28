@@ -180,7 +180,7 @@ const PageLayout = ({ children }: { children: React.ReactNode }) => {
               <div className="flex items-center gap-1.5">
                 <Wifi className="h-[16px] w-[16px] text-success" />
                 <span className="inline-block rounded-md border border-success-dark px-[6px] py-[2px] text-xs text-success">
-                  Live
+                  {t("live")}
                 </span>
               </div>
             </div>

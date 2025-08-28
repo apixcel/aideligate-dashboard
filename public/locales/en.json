@@ -1,6 +1,7 @@
 {
   "translation": {
     "logout": "Logout",
+    "live": "live",
     "nav": {
       "dashboard": "Dashboard",
       "calls": "Calls",
