@@ -22,7 +22,11 @@ const initialValues = {
 };
 
 const appointmentValidaatonPrefix = "appointments.validation.";
-
+const appointmentStatusLocale = {
+  scheduled: "appointments.scheduled",
+  completed: "appointments.completed",
+  cancelled: "appointments.cancelled",
+};
 const AppointmentSchema = Yup.object({
   patient_name: Yup.string()
     .trim()
@@ -204,16 +208,17 @@ const CreateAppointment: React.FC<IProps> = ({
                               defaultValues.status
                                 ? {
                                     value: defaultValues?.status?.toLocaleLowerCase(),
-                                    label: defaultValues?.status,
+                                    label: t(appointmentStatusLocale[defaultValues?.status]),
                                   }
                                 : undefined
                             }
                             onChange={(e) => setFieldValue("status", e.value)}
                             className="w-full"
                             data={[
-                              { value: "pending", label: "Pending" },
-                              { value: "completed", label: "Completed" },
-                              { value: "cancelled", label: "Cancelled" },
+                              // "scheduled", "completed", "cancelled"
+                              { value: "scheduled", label: t(appointmentStatusLocale.scheduled) },
+                              { value: "completed", label: t(appointmentStatusLocale.completed) },
+                              { value: "cancelled", label: t(appointmentStatusLocale.cancelled) },
                             ]}
                           />
                           <RenderFormErrorMessage name="status" />
