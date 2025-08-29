@@ -38,8 +38,6 @@ const CreateProvider: React.FC<IProps> = ({
   deafultValues,
   onSuccess,
   renderTrigger = true,
-  title = "Provider",
-  submitLabel,
 }) => {
   // allow controlled or fallback to internal state (even though props mark them as required)
   const [internalOpen, setInternalOpen] = useState(false);
@@ -71,6 +69,7 @@ const CreateProvider: React.FC<IProps> = ({
         onSuccess?.();
         toast.success(isUpdateMode ? "Provider updated" : "Provider created");
         setOpen(false);
+        helpers.resetForm();
       } catch (e) {
         console.error(e);
       } finally {
