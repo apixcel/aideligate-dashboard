@@ -44,7 +44,7 @@ const ProvidersTable = () => {
   }, [search, refetch]);
   return (
     <div className="flex w-full flex-col gap-[20px]">
-      <div className="flex w-full items-center justify-between gap-[10px]">
+      <div className="flex w-full flex-wrap items-end justify-between gap-[10px]">
         <div className="w-full max-w-[450px]">
           <label htmlFor="search">{t("calls.search")}</label>
           <div className="relative text-lighter">
@@ -61,46 +61,48 @@ const ProvidersTable = () => {
 
         <CreateProvider onSuccess={() => setRefetch(!refetch)} />
       </div>
-      <table className="w-full caption-bottom text-sm">
-        <thead className="border-b border-dark">
-          <tr className="hover:bg-muted/50 data-[state=selected]:bg-muted border-b border-dark transition-colors">
-            {providersTableHeaders.map((header) => (
-              <th
-                key={header.key}
-                className="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap"
-              >
-                {t(header.label)}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        {/* table body */}
-        <tbody className="divide-y divide-dark last:border-0">
-          {isLoading ? (
-            <TableRowSkeleton col={providersTableHeaders.length} /> // ✅ skeleton while loading
-          ) : (
-            doctors.map((row) => (
-              <tr
-                key={row.id}
-                className="cursor-pointer text-light duration-[0.3s] hover:bg-white/5"
-              >
-                <td className="cursor-pointer p-2 align-middle font-medium whitespace-nowrap">
-                  {row.full_name}
-                </td>
-                <td className="cursor-pointer p-2 align-middle font-medium whitespace-nowrap">
-                  {format(new Date(row.created_at), "dd MMM yyyy")}
-                </td>
-                <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
-                  <div className="flex items-center gap-1">
-                    <EditProvderInfo onSuccess={() => setRefetch(!refetch)} provider={row} />
-                    <DeleteProvider onSuccess={() => setRefetch(!refetch)} doctor={row} />
-                  </div>
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+      <div className="w-full overflow-x-auto">
+        <table className="w-full caption-bottom text-sm">
+          <thead className="border-b border-dark">
+            <tr className="hover:bg-muted/50 data-[state=selected]:bg-muted border-b border-dark transition-colors">
+              {providersTableHeaders.map((header) => (
+                <th
+                  key={header.key}
+                  className="text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap"
+                >
+                  {t(header.label)}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          {/* table body */}
+          <tbody className="divide-y divide-dark last:border-0">
+            {isLoading ? (
+              <TableRowSkeleton col={providersTableHeaders.length} /> // ✅ skeleton while loading
+            ) : (
+              doctors.map((row) => (
+                <tr
+                  key={row.id}
+                  className="cursor-pointer text-light duration-[0.3s] hover:bg-white/5"
+                >
+                  <td className="cursor-pointer p-2 align-middle font-medium whitespace-nowrap">
+                    {row.full_name}
+                  </td>
+                  <td className="cursor-pointer p-2 align-middle font-medium whitespace-nowrap">
+                    {format(new Date(row.created_at), "dd MMM yyyy")}
+                  </td>
+                  <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
+                    <div className="flex items-center gap-1">
+                      <EditProvderInfo onSuccess={() => setRefetch(!refetch)} provider={row} />
+                      <DeleteProvider onSuccess={() => setRefetch(!refetch)} doctor={row} />
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

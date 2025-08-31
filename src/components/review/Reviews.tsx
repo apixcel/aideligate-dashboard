@@ -4,7 +4,7 @@ import { IReview } from "@/interface/review.interface";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import DropDownSelector from "../shared/DropDownSelector";
+import DropDownSelector from "../ui/DropDownSelector";
 import CreateOrUpDateReply from "./CreateOrUpDateReply";
 /** --- Small UI bits --- */
 const Star = ({ filled = false, className = "" }) => (
@@ -69,10 +69,10 @@ const ReviewCard = ({ review, onReply }: { review: IReview; onReply?: () => void
   return (
     <div className="rounded-2xl border border-dark bg-darker px-5 py-[40px] shadow-sm transition hover:shadow-md">
       {/* Header */}
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col items-start justify-between gap-3 sm:flex-row">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           {/* Avatar */}
-          <div className="grid h-9 w-9 place-items-center rounded-full bg-slate-100 text-sm font-semibold text-slate-600">
+          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-slate-100 text-sm font-semibold text-slate-600">
             {name.charAt(0).toUpperCase()}
           </div>
           <div>
@@ -95,13 +95,13 @@ const ReviewCard = ({ review, onReply }: { review: IReview; onReply?: () => void
         </div>
 
         {/* Actions */}
-        <div className="flex gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row">
           <CreateOrUpDateReply onSuccess={onReply} review={review} />
           <Link
             href={"/"}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1 rounded-lg border border-light px-3 py-1.5 text-sm font-medium"
+            className="inline-flex w-full items-center gap-1 rounded-lg border border-light px-3 py-1.5 text-sm font-medium sm:w-[unset]"
           >
             ↗ {t("reviews.view_original")}
           </Link>
@@ -156,7 +156,7 @@ const Reviews = () => {
 
   return (
     <div className="my-7">
-      <div className="flex items-end justify-start gap-[15px]">
+      <div className="flex flex-wrap items-end justify-start gap-[15px]">
         <div className="flex flex-col gap-[10px]">
           <span>{t("reviews.sentiment")}</span>
           <DropDownSelector

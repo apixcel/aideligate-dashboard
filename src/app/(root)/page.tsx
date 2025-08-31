@@ -18,7 +18,7 @@ const Home = () => {
       <HomeStatisticsCards />
 
       {/* quick actions button */}
-      <div className="flex gap-4">
+      <div className="flex flex-wrap gap-4">
         <CreateAppointment />
         <AddTimeBlockWindow label={"dashboard_overview.add_time_block"} />
       </div>

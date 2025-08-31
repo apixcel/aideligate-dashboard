@@ -1,8 +1,8 @@
 "use client";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
-import PaginationPageFilter from "./PaginationPageFilter";
 import { useTranslation } from "react-i18next";
+import PaginationPageFilter from "./PaginationPageFilter";
 interface IProps {
   totalPages?: number;
   pageLimit?: number;
@@ -26,9 +26,9 @@ const Pagination: React.FC<IProps> = ({
     onPageChange?.(page);
     setCurrentPage(page);
   };
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex flex-wrap items-center justify-between gap-3">
       <div className="flex items-center gap-2">
         <label className="mb-0">{t("calls.row_per_page")}</label>
         <PaginationPageFilter onChange={onPageLimitChange} />

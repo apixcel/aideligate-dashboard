@@ -36,16 +36,16 @@ const HomeFeedTabs = () => {
 
   return (
     <div className="flex flex-col gap-6 rounded-xl border border-darker bg-darkest p-6 transition-all duration-300">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-5">
         {/* section sub title */}
         <SectionSubTitle
           title={t("dashboard_overview.live_activity")}
           description={t("dashboard_overview.recent_activity")}
         />
 
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4">
           <Filter className="h-4 w-4 text-lighter" />
-          <div className="flex gap-1">
+          <div className="flex flex-wrap gap-4 sm:gap-1">
             {tabs.map((tab) => (
               <button
                 onClick={() => setActiveTab(tab.value)}
@@ -62,12 +62,10 @@ const HomeFeedTabs = () => {
         </div>
       </div>
 
-      <div>
-        {/* {activeTab === "all" && <AllTabs />} */}
-        {activeTab === "appointments" && <AppointmentsTabs />}
-        {activeTab === "calls" && <CallTabs />}
-        {activeTab === "reviews" && <ReviewsTabs />}
-      </div>
+      {/* {activeTab === "all" && <AllTabs />} */}
+      {activeTab === "appointments" && <AppointmentsTabs />}
+      {activeTab === "calls" && <CallTabs />}
+      {activeTab === "reviews" && <ReviewsTabs />}
     </div>
   );
 };

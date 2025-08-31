@@ -1,8 +1,8 @@
 // shared
 export { default as LanguageFilter } from "./shared/LanguageFilter";
 export { default as LoginAsFilter } from "./shared/LoginAsFilter";
-export { default as SectionSubTitle } from "./shared/SectionSubTitle";
-export { default as SectionTitle } from "./shared/SectionTitle";
+export { default as SectionSubTitle } from "./ui/SectionSubTitle";
+export { default as SectionTitle } from "./ui/SectionTitle";
 
 // home
 export { default as HomeStatisticsCards } from "./home/HomeStatisticsCards";
