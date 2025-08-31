@@ -48,6 +48,7 @@ const MobSideBar: React.FC<IProps> = ({ isOpen, setIsOpen }) => {
       onClick={handleOverlayClick}
     >
       <Sidebar
+        setSidebarOpen={setIsOpen}
         sidebarOpen={isOpen}
         onLinkClick={() => setIsOpen(false)}
         className="flex h-full overflow-hidden"

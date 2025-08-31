@@ -1,5 +1,6 @@
 import { sidebarLinks } from "@/constants";
 import { cn } from "@/utils";
+import { X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,10 +12,11 @@ const SIDEBAR_CLOSED = 64; // 4rem
 
 interface IProps {
   sidebarOpen: boolean;
+  setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onLinkClick?: () => void;
   className?: string;
 }
-const Sidebar: React.FC<IProps> = ({ sidebarOpen, onLinkClick, className }) => {
+const Sidebar: React.FC<IProps> = ({ sidebarOpen, onLinkClick, className ,setSidebarOpen}) => {
   const pathname = usePathname();
 
   const parentVariants = {
@@ -47,7 +49,7 @@ const Sidebar: React.FC<IProps> = ({ sidebarOpen, onLinkClick, className }) => {
         <div className="pb-12">
           <div className="space-y-4 py-4">
             <div className="px-3 py-2">
-              <div className="mb-4 flex h-[40px] items-center justify-center">
+              <div className="mb-4 flex h-[40px] items-center justify-between md:justify-center">
                 <AnimatePresence initial={false} mode="wait">
                   {sidebarOpen ? (
                     <motion.div
@@ -86,6 +88,13 @@ const Sidebar: React.FC<IProps> = ({ sidebarOpen, onLinkClick, className }) => {
                     </motion.div>
                   )}
                 </AnimatePresence>
+
+                <button
+                  onClick={() => setSidebarOpen(false)}
+                  className="flex rounded-[3px] bg-lightest/10 p-1 md:hidden"
+                >
+                  <X />
+                </button>
               </div>
 
               {/* sidebar links */}
