@@ -13,9 +13,6 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import i18n from "../../../i18n";
 
-const SIDEBAR_OPEN = 256; // 16rem
-const SIDEBAR_CLOSED = 64; // 4rem
-
 const PageLayout = ({ children }: { children: React.ReactNode }) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
@@ -27,7 +24,7 @@ const PageLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex h-dvh overflow-hidden" key={i18n.language}>
       {/* desktop sidebar */}
-      <Sidebar sidebarOpen={sidebarOpen} />
+      <Sidebar setSidebarOpen={setSidebarOpen} sidebarOpen={sidebarOpen} />
       <MobSideBar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
       {/* layout container (animate padding-left so main shifts smoothly) */}
       <motion.div
