@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import * as Yup from "yup";
-import DropDownSelector from "../shared/DropDownSelector";
+import DropDownSelector from "../ui/DropDownSelector";
 import RenderFormErrorMessage from "../ui/RenderFormErrorMessage";
 import DoctorSelector from "./DoctorSelector";
 const initialValues = {

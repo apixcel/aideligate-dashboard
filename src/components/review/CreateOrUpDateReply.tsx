@@ -52,7 +52,7 @@ export default function CreateOrUpDateReply({ review, onSuccess }: Props) {
       {/* Trigger */}
       <button
         type="button"
-        className="inline-flex items-center gap-1 rounded-lg border border-light px-3 py-1.5 text-sm font-medium"
+        className="inline-flex w-full items-center gap-1 rounded-lg border border-light px-3 py-1.5 text-sm font-medium sm:w-[unset]"
         onClick={() => setIsOpen(true)}
       >
         ↩︎ {t(review.reply ? "reviews.edit_reply" : "reviews.reply")}

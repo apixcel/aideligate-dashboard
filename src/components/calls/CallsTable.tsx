@@ -5,10 +5,10 @@ import { SectionSubTitle } from "@/components";
 import useDebounce from "@/hooks/useDebounce";
 import { ICall, TCallStatus } from "@/interface/call.interface";
 import { format } from "date-fns";
-import { Search, User } from "lucide-react";
+import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import Pagination from "../shared/Pagination";
+import Pagination from "../ui/Pagination";
 import TableRowSkeleton from "../ui/TableRowSkeleton";
 import SortByFilter from "./SortByFilter";
 import StatusFilter from "./StatusFilter";
@@ -30,10 +30,10 @@ const callsTableHeaders = [
     label: "calls.note",
     key: "note",
   },
-  {
-    label: "calls.action",
-    key: "actions",
-  },
+  // {
+  //   label: "calls.action",
+  //   key: "actions",
+  // },
 ];
 
 const statusLocale = {
@@ -102,7 +102,7 @@ const CallsTable = () => {
           </div>
 
           {/* filters */}
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {/* status */}
             <StatusFilter
               onChange={(status) => setQueryFilter({ ...queryFilter, status: status.value })}
@@ -161,11 +161,11 @@ const CallsTable = () => {
                       <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
                         {row.notes}
                       </td>
-                      <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
+                      {/* <td className="cursor-pointer p-2 align-middle whitespace-nowrap">
                         <button className="rounded-md p-1 text-light hover:bg-white-secondary hover:text-black-secondary">
                           <User className="h-4 w-4" />
                         </button>
-                      </td>
+                      </td> */}
                     </tr>
                   ))
                 )}
