@@ -7,7 +7,7 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-    "start-dev": "next start -p 3001",
+    "start-prod": "next start -p 3001",
     "check-lint": "next lint && tsc --noEmit",
     "fix-format": "prettier --write .",
     "check-format": "prettier --check .",
