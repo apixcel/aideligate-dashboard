@@ -44,7 +44,6 @@ export const signUpAction = async (payload: IUserSignUp) => {
   const { data, error } = await supabase.auth.signUp({
     email: payload.email,
     password: payload.password,
-
     options: {
       emailRedirectTo: redirectTo,
       data: {
