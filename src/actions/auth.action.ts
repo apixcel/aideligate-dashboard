@@ -24,7 +24,7 @@ async function ensureDefaultClient(
     .insert({
       client_name,
       client_email,
-      plan: "Free Trial", // allowed: Free Trial, 299k, 399k, 699k
+      plan: "299k", // allowed: 299k, 399k, 699k
       account_status: "active", // enum default is also fine
       language_mix: null,
       // user_id is set by the DB trigger from auth.uid()
@@ -44,7 +44,6 @@ export const signUpAction = async (payload: IUserSignUp) => {
   const { data, error } = await supabase.auth.signUp({
     email: payload.email,
     password: payload.password,
-
     options: {
       emailRedirectTo: redirectTo,
       data: {
