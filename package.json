@@ -5,9 +5,9 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
-    "start": "next start",
+    "start": "next start -p 3001",
     "lint": "eslint",
-    "start-prod": "next start -p 3001",
+    "start-dev": "next start",
     "check-lint": "next lint && tsc --noEmit",
     "fix-format": "prettier --write .",
     "check-format": "prettier --check .",
