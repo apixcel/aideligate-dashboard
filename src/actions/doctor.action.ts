@@ -1,6 +1,7 @@
 "use server";
 import { IDoctor } from "@/interface/doctor";
 import { createClient } from "@/utils/supabase/server";
+import { ensureDefaultClient } from "./auth.action";
 export const getAllDoctors = async (opts?: { search?: string }) => {
   const supabase = await createClient();
 
@@ -38,15 +39,19 @@ export const createDoctorAction = async (payload: Pick<IDoctor, "full_name">) =>
   if (!auth.user) {
     return { error: "User not found", status: 400 as const };
   }
-  const client = await supabase.from("clients").select("id").eq("user_id", auth.user.id).single();
+  let client = await supabase.from("clients").select("id").eq("user_id", auth.user.id).single();
 
   if (!client.data) {
-    return { error: "Client not found", status: 400 as const };
+    await ensureDefaultClient(Promise.resolve(supabase), {
+      client_email: auth.user.email!,
+      client_name: auth.user.user_metadata.display_name || "N/A",
+    });
+    client = await supabase.from("clients").select("id").eq("user_id", auth.user.id).single();
   }
 
   const { data, error } = await supabase
     .from("doctors")
-    .insert({ full_name: payload.full_name.trim(),client_id: client.data.id })
+    .insert({ full_name: payload.full_name.trim(), client_id: client.data?.id })
     .select("*")
     .single();
 

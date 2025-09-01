@@ -4,7 +4,7 @@ import { IUserSignUp } from "@/interface/auth.interface";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-async function ensureDefaultClient(
+export async function ensureDefaultClient(
   supabase: ReturnType<typeof createClient>,
   { client_email, client_name }: { client_email: string; client_name: string }
 ) {
@@ -27,6 +27,7 @@ async function ensureDefaultClient(
       plan: "299k", // allowed: 299k, 399k, 699k
       account_status: "active", // enum default is also fine
       language_mix: null,
+
       // user_id is set by the DB trigger from auth.uid()
     })
     .select("id")

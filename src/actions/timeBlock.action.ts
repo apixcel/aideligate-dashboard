@@ -2,6 +2,7 @@
 
 import { ITimeBlock } from "@/interface/timeBlock.interface";
 import { createClient } from "@/utils/supabase/server";
+import { ensureDefaultClient } from "./auth.action";
 
 export const createTimeBlocks = async (
   payloads: Pick<ITimeBlock, "start_time" | "end_time" | "day_of_week">[]
@@ -17,13 +18,14 @@ export const createTimeBlocks = async (
     };
   }
 
-  const client = await supabase.from("clients").select("id").eq("user_id", auth.user.id).single();
+  let client = await supabase.from("clients").select("id").eq("user_id", auth.user.id).single();
 
   if (!client.data) {
-    return {
-      error: "Client not found",
-      status: 400,
-    };
+    await ensureDefaultClient(Promise.resolve(supabase), {
+      client_email: auth.user.email!,
+      client_name: auth.user.user_metadata.display_name || "N/A",
+    });
+    client = await supabase.from("clients").select("id").eq("user_id", auth.user.id).single();
   }
 
   const { data, error } = await supabase
@@ -33,7 +35,7 @@ export const createTimeBlocks = async (
         start_time: p.start_time,
         end_time: p.end_time,
         day_of_week: p.day_of_week,
-        client_id: client.data.id,
+        client_id: client.data?.id,
       }))
     )
     .select("*");
