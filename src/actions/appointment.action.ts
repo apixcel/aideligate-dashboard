@@ -3,6 +3,7 @@
 import { IAppointment, TAppointmentStatus } from "@/interface/appointment.interface";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
+import { ensureDefaultClient } from "./auth.action";
 function toIsoDowUtc(d: Date) {
   // 0=Sun..6=Sat  ->  1=Mon..7=Sun
   const dow = d.getUTCDay();
@@ -26,10 +27,14 @@ export async function createAppointmentAction(
     return { error: authError.message, status: 400 } as const;
   }
 
-  const client = await supabase.from("clients").select("*").eq("user_id", auth.user.id).single();
-  if (!client.data) {
-    return { error: "Client not found", status: 400 } as const;
-  }
+  let client = await supabase.from("clients").select("*").eq("user_id", auth.user.id).single();
+   if (!client.data) {
+     await ensureDefaultClient(Promise.resolve(supabase), {
+       client_email: auth.user.email!,
+       client_name: auth.user.user_metadata.display_name || "N/A",
+     });
+     client = await supabase.from("clients").select("id").eq("user_id", auth.user.id).single();
+   }
 
   if (client.error) {
     return { error: client.error.message, status: 400 } as const;
