@@ -21,7 +21,7 @@ export const createTimeBlocks = async (
   let client = await supabase.from("clients").select("id").eq("user_id", auth.user.id).single();
 
   if (!client.data) {
-    await ensureDefaultClient(Promise.resolve(supabase), {
+    await ensureDefaultClient({
       client_email: auth.user.email!,
       client_name: auth.user.user_metadata.display_name || "N/A",
     });

@@ -4,22 +4,27 @@ import { IUserSignUp } from "@/interface/auth.interface";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-export async function ensureDefaultClient(
-  supabase: ReturnType<typeof createClient>,
-  { client_email, client_name }: { client_email: string; client_name: string }
-) {
+export async function ensureDefaultClient({
+  client_email,
+  client_name,
+}: {
+  client_email: string;
+  client_name: string;
+}) {
+  const supabase = await createClient();
   // Only need minimal fields; triggers & defaults will fill the rest.
-  const { data: existing, error: existingErr } = await (await supabase)
+  const { data: existing, error: existingErr } = await supabase
     .from("clients")
     .select("id")
     .limit(1);
 
   if (existingErr) throw existingErr;
   if (existing && existing.length > 0) return existing[0];
+  const { data: userData } = await supabase.auth.getUser();
 
-  const { data, error } = await (
-    await supabase
-  )
+  if (!userData.user) throw new Error("User not found");
+
+  const { data, error } = await supabase
     .from("clients")
     .insert({
       client_name,
@@ -27,7 +32,7 @@ export async function ensureDefaultClient(
       plan: "299k", // allowed: 299k, 399k, 699k
       account_status: "active", // enum default is also fine
       language_mix: "en",
-
+      user_id: userData.user.id,
       // user_id is set by the DB trigger from auth.uid()
     })
     .select("id")
@@ -101,7 +106,7 @@ export const verifyEmail = async (code: string) => {
   }
 
   try {
-    await ensureDefaultClient(Promise.resolve(supabase), {
+    await ensureDefaultClient({
       client_email: data.user.email!,
       client_name: data.user.user_metadata.display_name || "N/A",
     });
