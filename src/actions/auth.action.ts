@@ -26,7 +26,7 @@ export async function ensureDefaultClient(
       client_email,
       plan: "299k", // allowed: 299k, 399k, 699k
       account_status: "active", // enum default is also fine
-      language_mix: null,
+      language_mix: "en",
 
       // user_id is set by the DB trigger from auth.uid()
     })
