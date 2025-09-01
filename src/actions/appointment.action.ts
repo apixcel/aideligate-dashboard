@@ -28,13 +28,13 @@ export async function createAppointmentAction(
   }
 
   let client = await supabase.from("clients").select("*").eq("user_id", auth.user.id).single();
-   if (!client.data) {
-     await ensureDefaultClient(Promise.resolve(supabase), {
-       client_email: auth.user.email!,
-       client_name: auth.user.user_metadata.display_name || "N/A",
-     });
-     client = await supabase.from("clients").select("id").eq("user_id", auth.user.id).single();
-   }
+  if (!client.data) {
+    await ensureDefaultClient({
+      client_email: auth.user.email!,
+      client_name: auth.user.user_metadata.display_name || "N/A",
+    });
+    client = await supabase.from("clients").select("id").eq("user_id", auth.user.id).single();
+  }
 
   if (client.error) {
     return { error: client.error.message, status: 400 } as const;
