@@ -37,8 +37,7 @@ async function ensureDefaultClient(
 }
 export const signUpAction = async (payload: IUserSignUp) => {
   const supabase = await createClient();
-  const BASE_URL =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://aideligate-dashboard-lilac.vercel.app";
+  const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://dashboard.aideligate.com";
 
   const redirectTo = `${BASE_URL}/verification`;
 
@@ -132,8 +131,7 @@ export const updateAccount = async (payload: Record<string, unknown>) => {
 
 export const forgotPasswordAction = async (email: string) => {
   const supabase = await createClient();
-  const BASE_URL =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://aideligate-dashboard-lilac.vercel.app";
+  const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://dashboard.aideligate.com";
 
   const redirectTo = `${BASE_URL}/reset-password`;
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
